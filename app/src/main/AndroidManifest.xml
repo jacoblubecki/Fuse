@@ -41,6 +41,7 @@
         android:name=".ui.activities.DiscoveryActivity"
         android:label="@string/title_activity_playlist"
         android:parentActivityName=".ui.activities.FuseActivity"
+        android:launchMode="singleTop"
         />
 
     <activity android:name="com.spotify.sdk.android.authentication.LoginActivity"/>

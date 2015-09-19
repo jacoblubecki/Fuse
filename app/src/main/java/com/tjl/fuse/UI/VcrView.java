@@ -1,6 +1,8 @@
 package com.tjl.fuse.ui;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -18,12 +20,21 @@ public class VcrView extends LinearLayout {
   private Button playPause;
   private Button next;
 
-  private final Context context;
+  public VcrView(Context context) {
+    super(context);
+  }
 
   public VcrView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    this.context = context;
+  }
 
+  public VcrView(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+  }
+
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  public VcrView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    super(context, attrs, defStyleAttr, defStyleRes);
   }
 
   @Override protected void onFinishInflate() {

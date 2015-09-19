@@ -12,20 +12,13 @@
       android:layout_height="wrap_content"
       />
 
-  <android.support.v4.widget.DrawerLayout
-      android:id="@+id/drawer_layout_home"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      >
-
     <FrameLayout
         android:id="@+id/content_wrapper"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
 
-      <com.tjl.fuse.ui.PlaylistView xmlns:android="http://schemas.android.com/apk/res/android"
+      <com.tjl.fuse.ui.PlaylistView
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:orientation="vertical"
@@ -36,7 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-
 
       </com.tjl.fuse.ui.PlaylistView>
 
@@ -80,24 +72,5 @@
             />
       </com.tjl.fuse.ui.VcrView>
     </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/drawer_wrapper"
-        style="@style/Fuse"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        >
-      <ListView
-          android:id="@+id/list_slidermenu_home"
-          style="@style/FuseNavDrawer"
-          android:layout_width="280dp"
-          android:layout_height="match_parent"
-          />
-
-    </LinearLayout>
-
-  </android.support.v4.widget.DrawerLayout>
 
 </LinearLayout>
