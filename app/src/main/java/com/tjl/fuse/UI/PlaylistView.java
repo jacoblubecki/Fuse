@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import com.tjl.fuse.R;
-import com.tjl.fuse.adapter.SearchAdapter;
+import com.tjl.fuse.adapter.PlaylistAdapter;
 import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.player.tracks.FuseTrack;
 import java.util.ArrayList;
@@ -30,13 +30,11 @@ public class PlaylistView extends LinearLayout {
     LinearLayoutManager manager = new LinearLayoutManager(getContext());
     ArrayList<FuseTrack> items = new ArrayList<>();
     if(playerManager.getQueue()!=null) {
-
-      for (FuseTrack track : playerManager.getQueue().getTracks()) {
-        items.add(track);
-      }
+      items = (ArrayList<FuseTrack>) playerManager.getQueue().getTracks();
     }
+
     //items.add(new Track());
-    SearchAdapter adapter = new SearchAdapter(items);
+    PlaylistAdapter adapter = new PlaylistAdapter(items);
 
     recyclerView = (RecyclerView) findViewById(R.id.search_list_view);
     recyclerView.setLayoutManager(manager);
