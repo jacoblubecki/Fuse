@@ -6,11 +6,8 @@
 
   <!-- SoundCloud -->
   <string name="soundcloud_redirect">fuse://soundcloud/redirect</string>
-  <string name="title_activity_playlist">PaylistActivity</string>
-
-  <string name="hello_world">Hello world!</string>
-  <string name="action_settings">Settings</string>
   <string name="soundcloud_token_key">soundcloud_token_key</string>
+  <string name="title_activity_playlist">Playlist</string>
 
   <!-- Preferences -->
   <string name="shared_prefs_name">fuse_preferences</string>

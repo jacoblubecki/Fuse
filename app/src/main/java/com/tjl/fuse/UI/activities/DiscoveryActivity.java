@@ -11,6 +11,8 @@ import com.tjl.fuse.R;
  */
 public class DiscoveryActivity extends AppCompatActivity {
 
+  public static String EXTRA_PLAYLIST_VALUE = "EXTRA_PLAYLIST_VALUE";
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -27,6 +29,12 @@ public class DiscoveryActivity extends AppCompatActivity {
 
   public void handleIntent(Intent intent) {
     setIntent(intent);
+
+    String channel = getIntent().getStringExtra(EXTRA_PLAYLIST_VALUE);
+
+    if(channel != null) {
+      setTitle(channel);
+    }
   }
 
   @Override public void onNewIntent(Intent newIntent) {

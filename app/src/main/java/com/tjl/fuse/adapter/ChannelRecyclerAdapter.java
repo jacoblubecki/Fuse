@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.tjl.fuse.R;
 import com.tjl.fuse.models.ChannelItem;
+import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.ui.activities.DiscoveryActivity;
 import java.util.List;
 
@@ -32,11 +33,14 @@ public class ChannelRecyclerAdapter extends RecyclerView.Adapter<ChannelRecycler
     return new ChannelViewHolder(view);
   }
 
-  @Override public void onBindViewHolder(final ChannelViewHolder holder, int position) {
+  @Override public void onBindViewHolder(final ChannelViewHolder holder, final int position) {
     holder.text.setText(channels.get(position).title);
     holder.card.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
+        PlayerManager.getInstance().pause();
+
         Intent intent = new Intent(holder.card.getContext(), DiscoveryActivity.class);
+        intent.putExtra(DiscoveryActivity.EXTRA_PLAYLIST_VALUE, channels.get(position).title);
         holder.card.getContext().startActivity(intent);
       }
     });
