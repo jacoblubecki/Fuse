@@ -48,20 +48,22 @@ public class FuseActivity extends NavDrawerActivity {
     super.onNewIntent(intent);
 
     setIntent(intent);
+    if(intent.getDataString() != null) {
 
-    String redirect = getString(R.string.soundcloud_redirect);
+      String redirect = getString(R.string.soundcloud_redirect);
 
-    if (intent.getDataString().startsWith(redirect)) {
-      SoundCloudAuth.handleSoundCloudAuthCallback(this, intent);
+      if (intent.getDataString().startsWith(redirect)) {
+        SoundCloudAuth.handleSoundCloudAuthCallback(this, intent);
+      } else {
+        Timber.i("Unhandled new intent was intercepted.");
+        // handle other new intents
+      }
     } else {
-      Timber.i("Unhandled new intent was intercepted.");
-      // handle other new intents
+      Timber.w("Intent data was null.");
     }
   }
 
   @Override protected void displayView(int position) {
-    super.displayView(position);
-
     Timber.e("Position is " + position);
 
     View c = findViewById(R.id.container);
@@ -99,6 +101,8 @@ public class FuseActivity extends NavDrawerActivity {
         v.addView(c, index);
         break;
     }
+
+    super.displayView(position);
   }
 }
 

@@ -5,6 +5,6 @@
       android:drawable="@color/fuse_light_grey"/>
   <item android:state_pressed="true"
       android:drawable="@color/fuse_accent"/>
-  <item android:state_focused="true"
-      android:drawable="@color/fuse_light_grey"/>
+  <item android:state_selected="true"
+      android:drawable="@color/fuse_accent"/>
 </selector>

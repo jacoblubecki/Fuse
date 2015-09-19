@@ -20,6 +20,7 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
   private FuseTrack currentTrack;
 
   private AudioManager manager;
+  private boolean wasPlayingAtTransientLoss = false;
 
   private static PlayerManager instance;
 
@@ -175,23 +176,35 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
   @Override public void onAudioFocusChange(int focusChange) {
     if(spotify.state != State.STOPPED) {
       if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-        pause();
+        Timber.i("FOCUS LOST TRANSIENT");
+        if (isPlaying()) {
+          pause();
+          wasPlayingAtTransientLoss = isPlaying();
+        }
       } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-        switch (currentTrack.type) {
-          case SPOTIFY:
-            spotify.play();
-            break;
+        if(wasPlayingAtTransientLoss) {
+          switch (currentTrack.type) {
+            case SPOTIFY:
+              spotify.play();
+              break;
 
-          case SOUNDCLOUD:
-            soundcloud.play();
-            break;
+            case SOUNDCLOUD:
+              soundcloud.play();
+              break;
 
-          default:
-            Timber.e("Tried to play a track of unknown type.");
-            break;
+            default:
+              Timber.e("Tried to play a track of unknown type.");
+              break;
+          }
         }
       } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
         pause();
+      }
+
+
+
+      if(wasPlayingAtTransientLoss) {
+        // Launch service
       }
     }
   }
