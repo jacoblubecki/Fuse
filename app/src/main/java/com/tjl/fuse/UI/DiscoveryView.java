@@ -52,6 +52,5 @@ public class DiscoveryView extends LinearLayout {
     cards = (RecyclerView) findViewById(R.id.channels_view);
     cards.setLayoutManager(manager);
     cards.setAdapter(adapter);
-    cards.setHasFixedSize(true);
   }
 }

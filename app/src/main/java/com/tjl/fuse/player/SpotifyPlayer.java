@@ -43,8 +43,9 @@ public class SpotifyPlayer extends FusePlayer
   }
 
   public void start(String uri) {
-    player.play(uri);
     changeState(State.PLAYING);
+    player.play(uri);
+    Timber.i("Playing track with uri %s.", uri);
   }
 
   @Override public void play() {
@@ -138,9 +139,9 @@ public class SpotifyPlayer extends FusePlayer
   }
 
   @Override public void onInitialized(Player player) {
-    changeState(PAUSED);
     player.addConnectionStateCallback(this);
     player.addPlayerNotificationCallback(this);
+    Timber.i("Initialized");
   }
 
   @Override public void onError(Throwable throwable) {
