@@ -43,10 +43,11 @@ public class DiscoveryView extends LinearLayout {
     LinearLayoutManager manager = new LinearLayoutManager(getContext());
 
     ArrayList<ChannelItem> items = new ArrayList<>();
-    items.add(new ChannelItem("Test", "http://albumartcollection.com/wp-content/uploads/2011/07/summer-album-art.jpg"));
-    items.add(new ChannelItem("Test A", "http://albumartcollection.com/wp-content/uploads/2011/07/summer-album-art.jpg"));
-    items.add(new ChannelItem("Test B", "http://albumartcollection.com/wp-content/uploads/2011/07/summer-album-art.jpg"));
-    items.add(new ChannelItem("Test C", "http://albumartcollection.com/wp-content/uploads/2011/07/summer-album-art.jpg"));
+    items.add(new ChannelItem("Discover", "http://www.clker.com/cliparts/H/E/C/Q/w/R/green-flame-md.png"));
+    items.add(new ChannelItem("Around Me", "https://cdn3.iconfinder.com/data/icons/iconic-1/32/map_pin_fill-512.png"));
+    items.add(new ChannelItem("Hype Machine", "http://static.hypem.com/images/logos/heart-200.png"));
+    items.add(new ChannelItem("Spotify", "http://www.icons101.com/icons/17/Mitu_icon_pack_2_by_scope66/128/spotify.png"));
+    items.add(new ChannelItem("SoundCloud", "http://icons.iconarchive.com/icons/xenatt/the-circle/256/App-Soundcloud-icon.png"));
 
     ChannelRecyclerAdapter adapter = new ChannelRecyclerAdapter(items);
 

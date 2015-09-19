@@ -27,6 +27,12 @@ public class ChannelRecyclerAdapter extends RecyclerView.Adapter<ChannelRecycler
     View view =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_card, parent, false);
 
+    view.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+
+      }
+    });
+
     return new ChannelViewHolder(view);
   }
 

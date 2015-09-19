@@ -52,6 +52,10 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
     }
   }
 
+  public Queue getQueue() {
+    return queue;
+  }
+
   public void setShuffling(boolean shuffling) {
     if (queue != null) {
       queue.setShuffling(shuffling);
