@@ -43,6 +43,12 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
 
   public void setQueue(Queue queue) {
     this.queue = queue;
+
+    if(queue.getSize() > 0) {
+      currentTrack = queue.current();
+    } else {
+      throw new IllegalStateException("Nothing in queue to play.");
+    }
   }
 
   public void setShuffling(boolean shuffling) {

@@ -6,4 +6,9 @@ package com.tjl.fuse.models;
 public class ChannelItem {
   public String title;
   public String image_url;
+
+  public ChannelItem(String title, String image_url) {
+    this.title = title;
+    this.image_url = image_url;
+  }
 }
