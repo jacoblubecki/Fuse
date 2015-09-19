@@ -1,9 +1,11 @@
 package com.tjl.fuse;
 
 import android.app.Application;
+import com.parse.Parse;
 import com.squareup.leakcanary.LeakCanary;
 import com.tjl.fuse.player.PlayerManager;
 import dagger.Component;
+import java.text.ParseException;
 import javax.inject.Singleton;
 import timber.log.Timber;
 
@@ -25,9 +27,18 @@ public class FuseApplication extends Application {
 
     instance = this;
 
+    // Leak detection
     LeakCanary.install(this);
 
-    Timber.plant(new Timber.DebugTree());
+    // Data
+    String parseAppId = getString(R.string.parse_app_id);
+    String parseClientKey = getString(R.string.parse_client_key);
+    Parse.initialize(this, parseAppId, parseClientKey);
+
+    // Logging
+    if(BuildConfig.DEBUG) {
+      Timber.plant(new Timber.DebugTree());
+    }
   }
 
   public static FuseApplication getApplication() {
