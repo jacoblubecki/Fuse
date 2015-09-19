@@ -1,34 +1,34 @@
 package com.tjl.fuse;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import br.liveo.Model.HelpLiveo;
+import br.liveo.interfaces.OnItemClickListener;
+import br.liveo.navigationliveo.NavigationLiveo;
 
-public class FuseActivity extends AppCompatActivity {
+public class FuseActivity extends NavigationLiveo implements OnItemClickListener {
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+  private HelpLiveo mHelpLiveo;
+
+  @Override public void onInt(Bundle bundle) {
+
+    mHelpLiveo = new HelpLiveo();
+    mHelpLiveo.add("test");
+    mHelpLiveo.addSubHeader("test2");
+    mHelpLiveo.add("test3");
+    mHelpLiveo.addSubHeader("test4");
+    mHelpLiveo.addSeparator();
+    mHelpLiveo.add("test5");
+    mHelpLiveo.addSubHeader("test6");
+
+    with(this).startingPosition(1) //Starting position in the list
+        .addAllHelpItem(mHelpLiveo.getHelp())
+        .build();
+
   }
 
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_main, menu);
-    return true;
-  }
+  @Override public void onItemClick(int i) {
 
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
-
-    //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
-    }
-
-    return super.onOptionsItemSelected(item);
   }
 }
+
+
