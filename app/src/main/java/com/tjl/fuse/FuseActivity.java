@@ -5,6 +5,7 @@ import android.os.Bundle;
 import br.liveo.Model.HelpLiveo;
 import br.liveo.interfaces.OnItemClickListener;
 import br.liveo.navigationliveo.NavigationLiveo;
+import timber.log.Timber;
 
 public class FuseActivity extends NavigationLiveo implements OnItemClickListener {
 
@@ -22,28 +23,38 @@ public class FuseActivity extends NavigationLiveo implements OnItemClickListener
     with(this).startingPosition(1) //Starting position in the list
         .addAllHelpItem(drawerItem.getHelp())
         .build();
+    Timber.plant(new Timber.DebugTree());
 
   }
 
   @Override public void onItemClick(int i) {//TODO should make this better
+
+    Timber.e("i is " + i);
     switch (i) {
       case 0:{
+        Timber.e("0");
         Intent intent = new Intent(this, PlaylistActivity.class);
         startActivity(intent);
+        break;
       }
       case 1:{
+        Timber.e("1");
         Intent intent = new Intent(this, PlaylistActivity.class);
         startActivity(intent);
+        break;
       }
       case 2:{
+        Timber.e("2");
         Intent intent = new Intent(this, PlaylistActivity.class);
         startActivity(intent);
+        break;
       }
-      case 3: {
+      case 4: {
+        Timber.e("3");
         Intent intent = new Intent(this, PlaylistActivity.class);
         startActivity(intent);
+        break;
       }
-
     }
   }
 }
