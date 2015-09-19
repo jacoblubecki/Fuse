@@ -29,7 +29,7 @@ public class PlaylistView extends LinearLayout {
     playerManager = PlayerManager.getInstance();
     LinearLayoutManager manager = new LinearLayoutManager(getContext());
     ArrayList<FuseTrack> items = new ArrayList<>();
-    if(playerManager.getQueue().getSize()!= 0) {
+    if(playerManager.getQueue()!=null) {
 
       for (FuseTrack track : playerManager.getQueue().getTracks()) {
         items.add(track);
@@ -38,7 +38,7 @@ public class PlaylistView extends LinearLayout {
     //items.add(new Track());
     SearchAdapter adapter = new SearchAdapter(items);
 
-    recyclerView = (RecyclerView) findViewById(R.id.playlist_view);
+    recyclerView = (RecyclerView) findViewById(R.id.search_list_view);
     recyclerView.setLayoutManager(manager);
     recyclerView.setAdapter(adapter);
 

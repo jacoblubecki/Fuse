@@ -1,6 +1,8 @@
 package com.tjl.fuse.ui;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import com.tjl.fuse.R;
+import com.tjl.fuse.adapter.SearchAdapter;
 import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.player.tracks.FuseTrack;
 import com.tjl.fuse.player.tracks.Queue;
@@ -32,6 +35,9 @@ public class FuseSearchView extends LinearLayout {
   private SpotifyService spotify;
   private String songUri;
   private PlayerManager playerManager;
+  private RecyclerView recyclerView;
+  SearchAdapter adapter;
+
 
   public FuseSearchView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -53,6 +59,22 @@ public class FuseSearchView extends LinearLayout {
 
     spotify = api.getService();
 
+    playerManager = PlayerManager.getInstance();
+    LinearLayoutManager manager = new LinearLayoutManager(getContext());
+    ArrayList<FuseTrack> items = new ArrayList<>();
+    if(playerManager.getQueue()!=null) {
+
+      for (FuseTrack track : playerManager.getQueue().getTracks()) {
+        items.add(track);
+      }
+    }
+   adapter = new SearchAdapter(items);
+
+    recyclerView = (RecyclerView) findViewById(R.id.search_list_view);
+    recyclerView.setLayoutManager(manager);
+    recyclerView.setAdapter(adapter);
+
+    invalidate();
 
 
     searchButton.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +82,8 @@ public class FuseSearchView extends LinearLayout {
         search(searchView.getQuery().toString());
       }
     });
+
+
   }
 
   public void search(String query) {
@@ -77,6 +101,7 @@ public class FuseSearchView extends LinearLayout {
         }
         playerManager.setQueue(new Queue(fuseTracks));
         playerManager.play();
+        adapter.notifyDataSetChanged();//TODO make this list show once it has been searched 
       }
 
       @Override public void failure(RetrofitError error) {
