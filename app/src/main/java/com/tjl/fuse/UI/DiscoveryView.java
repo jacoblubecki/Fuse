@@ -3,11 +3,9 @@ package com.tjl.fuse.ui;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.LinearLayout;
 import com.tjl.fuse.R;
 import com.tjl.fuse.adapter.ChannelRecyclerAdapter;
@@ -19,7 +17,7 @@ import java.util.ArrayList;
  */
 public class DiscoveryView extends LinearLayout {
 
-  private RecyclerView cards;
+  private RecyclerView recyclerView;
 
   public DiscoveryView(Context context) {
     super(context);
@@ -45,12 +43,17 @@ public class DiscoveryView extends LinearLayout {
     LinearLayoutManager manager = new LinearLayoutManager(getContext());
 
     ArrayList<ChannelItem> items = new ArrayList<>();
-    items.add(new ChannelItem("Test", ""));
+    items.add(new ChannelItem("Test", "http://albumartcollection.com/wp-content/uploads/2011/07/summer-album-art.jpg"));
+    items.add(new ChannelItem("Test A", "http://albumartcollection.com/wp-content/uploads/2011/07/summer-album-art.jpg"));
+    items.add(new ChannelItem("Test B", "http://albumartcollection.com/wp-content/uploads/2011/07/summer-album-art.jpg"));
+    items.add(new ChannelItem("Test C", "http://albumartcollection.com/wp-content/uploads/2011/07/summer-album-art.jpg"));
 
     ChannelRecyclerAdapter adapter = new ChannelRecyclerAdapter(items);
 
-    cards = (RecyclerView) findViewById(R.id.channels_view);
-    cards.setLayoutManager(manager);
-    cards.setAdapter(adapter);
+    recyclerView = (RecyclerView) findViewById(R.id.channels_view);
+    recyclerView.setLayoutManager(manager);
+    recyclerView.setAdapter(adapter);
+
+    invalidate();
   }
 }

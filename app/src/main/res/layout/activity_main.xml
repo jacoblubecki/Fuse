@@ -33,15 +33,22 @@
           />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/list_slidermenu_home"
-        style="@style/FuseNavDrawer"
-        android:layout_width="280dp"
+    <LinearLayout
+        android:id="@+id/drawer_wrapper"
+        style="@style/Fuse"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:drawSelectorOnTop="true"
-        />
+        >
+      <ListView
+          android:id="@+id/list_slidermenu_home"
+          style="@style/FuseNavDrawer"
+          android:layout_width="280dp"
+          android:layout_height="match_parent"
+          />
+
+    </LinearLayout>
 
   </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

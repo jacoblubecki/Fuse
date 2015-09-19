@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import com.tjl.fuse.R;
 import com.tjl.fuse.adapter.NavDrawerListAdapter;
@@ -23,6 +24,7 @@ import timber.log.Timber;
  * Created by Jacob on 9/19/15.
  */
 public class NavDrawerActivity extends AppCompatActivity {
+  private LinearLayout drawerWrapper;
   private DrawerLayout mDrawerLayout;
   private ListView mDrawerList;
   private ActionBarDrawerToggle mDrawerToggle;
@@ -62,23 +64,25 @@ public class NavDrawerActivity extends AppCompatActivity {
   }
 
   protected void setUpNavDrawer(int drawerID, int listID) {
+    drawerWrapper = (LinearLayout) findViewById(R.id.drawer_wrapper);
     mDrawerLayout = (DrawerLayout) findViewById(drawerID);
     mDrawerList = (ListView) findViewById(listID);
 
     mDrawerList.setAdapter(adapter);
     mDrawerList.setOnItemClickListener(listener);
 
-    mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
-      public void onDrawerClosed(View view) {
-        // calling onPrepareOptionsMenu() to show action bar icons
-        invalidateOptionsMenu();
-      }
+    mDrawerToggle =
+        new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
+          public void onDrawerClosed(View view) {
+            // calling onPrepareOptionsMenu() to show action bar icons
+            invalidateOptionsMenu();
+          }
 
-      public void onDrawerOpened(View drawerView) {
-        // calling onPrepareOptionsMenu() to hide action bar icons
-        invalidateOptionsMenu();
-      }
-    };
+          public void onDrawerOpened(View drawerView) {
+            // calling onPrepareOptionsMenu() to hide action bar icons
+            invalidateOptionsMenu();
+          }
+        };
     mDrawerLayout.setDrawerListener(mDrawerToggle);
   }
 
@@ -117,7 +121,7 @@ public class NavDrawerActivity extends AppCompatActivity {
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     // if nav drawer is opened, hide the action items
-    boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+    boolean drawerOpen = mDrawerLayout.isDrawerOpen(drawerWrapper);
     //menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
     return super.onPrepareOptionsMenu(menu);
   }
@@ -129,7 +133,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     // update selected item and title, then close the drawer
     mDrawerList.setItemChecked(position, true);
     mDrawerList.setSelection(position);
-    mDrawerLayout.closeDrawer(mDrawerList);
+    mDrawerLayout.closeDrawer(drawerWrapper);
 
     Timber.i("Display view.");
   }

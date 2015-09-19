@@ -11,9 +11,14 @@
 
   </style>
 
-  <style name="FuseNavDrawer" parent="Base.Widget.AppCompat.ListView">
+  <style name="Fuse">
     <item name="android:background">@color/fuse_light_grey</item>
+  </style>
+
+  <style name="FuseNavDrawer" parent="Base.Widget.AppCompat.ListView">
     <item name="android:listSelector">@drawable/list_selector</item>
+    <item name="android:drawSelectorOnTop">true</item>
+    <item name="android:choiceMode">singleChoice</item>
   </style>
 
   <style name="FuseToolbar" parent="FuseTheme">
