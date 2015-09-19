@@ -1,8 +1,6 @@
 package com.tjl.fuse.player.tracks;
 
-import com.tjl.fuse.FuseApplication;
 import java.util.List;
-import java.util.Random;
 import timber.log.Timber;
 
 /**
@@ -25,6 +23,14 @@ public class Queue {
 
   public void setLooping(boolean looping) {
     this.looping = looping;
+  }
+
+  public int getSize() {
+    return tracks.size();
+  }
+
+  public FuseTrack current() {
+    return tracks.get(index);
   }
 
   public void addTrackNextInQueue(FuseTrack track) {
@@ -60,7 +66,7 @@ public class Queue {
   }
 
   private void nextTrack() {
-    if(shuffling) {
+    if (shuffling) {
       index = (int) (Math.random() * tracks.size());
     } else {
       index++;
