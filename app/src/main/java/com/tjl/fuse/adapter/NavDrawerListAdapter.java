@@ -48,7 +48,7 @@ public class NavDrawerListAdapter extends BaseAdapter {
     int icon = navDrawerItems.get(position).getIcon();
     if (icon != -1) {
       imgIcon.setImageResource(icon);
-    } else if(navDrawerItems.get(position).getDrawable() != null){
+    } else if (navDrawerItems.get(position).getDrawable() != null) {
       imgIcon.setImageDrawable(navDrawerItems.get(position).getDrawable());
     }
     txtTitle.setText(navDrawerItems.get(position).getTitle());
