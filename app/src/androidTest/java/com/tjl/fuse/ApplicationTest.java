@@ -1,4 +1,4 @@
-package tjl.com.fuse;
+package com.tjl.fuse;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
