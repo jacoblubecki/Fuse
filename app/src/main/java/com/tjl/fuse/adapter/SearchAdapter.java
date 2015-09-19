@@ -25,7 +25,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewH
 
   @Override public TrackViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view =
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_card, parent, false);
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.track_card, parent, false);
 
     return new TrackViewHolder(view);
   }
