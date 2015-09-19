@@ -35,8 +35,5 @@ public class PlaylistView extends LinearLayout {
     recyclerView = (RecyclerView) findViewById(R.id.playlist_view);
     recyclerView.setLayoutManager(manager);
     recyclerView.setAdapter(adapter);
-
-    invalidate();
-
   }
 }
