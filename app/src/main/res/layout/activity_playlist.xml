@@ -38,7 +38,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="previous"
-            android:textSize="32sp"/>
+            android:textSize="24sp"/>
 
         <TextView
             android:id="@+id/play_button"
@@ -47,7 +47,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="play"
-            android:textSize="32sp"
+            android:textSize="24sp"
             />
 
         <TextView
@@ -57,7 +57,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="next"
-            android:textSize="32sp"/>
+            android:textSize="24sp"/>
     </com.tjl.fuse.UI.VcrView>
 
 
