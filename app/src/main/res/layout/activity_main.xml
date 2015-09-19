@@ -5,12 +5,12 @@
     android:orientation="vertical"
     >
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/FuseToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      style="@style/FuseToolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      />
 
   <android.support.v4.widget.DrawerLayout
       android:id="@+id/drawer_layout_home"
@@ -31,6 +31,45 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           />
+        <com.tjl.fuse.ui.VcrView
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_alignParentBottom="true"
+            android:background="#ff2500"
+            android:weightSum="3"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:id="@+id/previous_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="previous"
+                android:textSize="24sp"
+                />
+
+            <Button
+                android:id="@+id/play_pause_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="play"
+                android:textSize="24sp"
+                />
+
+            <Button
+                android:id="@+id/next_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="next"
+                android:textSize="24sp"
+                />
+        </com.tjl.fuse.ui.VcrView>
+
     </LinearLayout>
 
     <ListView
@@ -42,6 +81,6 @@
         android:choiceMode="singleChoice"
         android:drawSelectorOnTop="true"
         />
-
   </android.support.v4.widget.DrawerLayout>
+
 </LinearLayout>
