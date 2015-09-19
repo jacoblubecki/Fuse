@@ -1,12 +1,13 @@
 package com.tjl.fuse.player.tracks;
 
+import java.util.Iterator;
 import java.util.List;
 import timber.log.Timber;
 
 /**
  * Created by Jacob on 9/18/15.
  */
-public class Queue {
+public class Queue implements Iterable<FuseTrack>{
 
   private List<FuseTrack> tracks;
   private int index = 0;
@@ -31,6 +32,10 @@ public class Queue {
 
   public FuseTrack current() {
     return tracks.get(index);
+  }
+
+  public List<FuseTrack> getTracks() {
+    return tracks;
   }
 
   public void addTrackNextInQueue(FuseTrack track) {
@@ -81,5 +86,9 @@ public class Queue {
     }
 
     Timber.i("Moved to queue index: " + index);
+  }
+
+  @Override public Iterator<FuseTrack> iterator() {
+    return tracks.iterator();
   }
 }
