@@ -23,7 +23,7 @@ public class VcrView extends LinearLayout {
   public VcrView(Context context, AttributeSet attrs) {
     super(context, attrs);
     this.context = context;
-    //playerManager = PlayerManager.getInstance();
+
   }
 
   @Override protected void onFinishInflate() {
@@ -32,25 +32,27 @@ public class VcrView extends LinearLayout {
     playPause = (Button) this.findViewById(R.id.play_pause_button);
     next = (Button) this.findViewById(R.id.next_button);
 
+    playerManager = PlayerManager.getInstance();
+
     previous.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
-     //   playerManager.previous();
+        playerManager.previous();
       }
     });
 
     next.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
-       // playerManager.next();
+        playerManager.next();
       }
     });
 
     playPause.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
-       /* if (playerManager.isPlaying()) {
+        if (playerManager.isPlaying()) {
           playerManager.pause();
         } else {
           playerManager.play();
-        }*/
+        }
       }
     });
 

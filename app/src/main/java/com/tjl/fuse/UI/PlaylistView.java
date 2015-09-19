@@ -6,7 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import com.tjl.fuse.R;
+import com.tjl.fuse.player.PlayerManager;
+import com.tjl.fuse.player.tracks.FuseTrack;
+import com.tjl.fuse.player.tracks.Queue;
 import com.tjl.fuse.utils.preferences.StringPreference;
+import java.util.ArrayList;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.TracksPager;
@@ -19,8 +23,10 @@ import timber.log.Timber;
  * Created by JoshBeridon on 9/19/15.
  */
 public class PlaylistView extends LinearLayout {
-  Button search;
-  SpotifyService spotify;
+  private Button search;
+  private SpotifyService spotify;
+  private String songUri;
+  private PlayerManager playerManager;
 
   public PlaylistView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -31,6 +37,7 @@ public class PlaylistView extends LinearLayout {
 
     String tokenKey = getContext().getString(R.string.spotify_token_key);
     String token = new StringPreference(getContext(), tokenKey).get();
+    playerManager = PlayerManager.getInstance();
 
     search = (Button) findViewById(R.id.search_button);
     SpotifyApi api = new SpotifyApi();
@@ -49,6 +56,11 @@ public class PlaylistView extends LinearLayout {
     spotify.searchTracks("magic", new Callback<TracksPager>() {
       @Override public void success(TracksPager tracksPager, Response response) {
         Timber.e(tracksPager.tracks.items.get(0).name);
+        FuseTrack fuseTrack = new FuseTrack(tracksPager.tracks.items.get(0));
+        ArrayList<FuseTrack> fuseTracks = new ArrayList<>();
+        fuseTracks.add(fuseTrack);
+        playerManager.setQueue(new Queue(fuseTracks));
+        playerManager.play();
       }
 
       @Override public void failure(RetrofitError error) {
