@@ -75,7 +75,7 @@ public class Queue {
     if (index > tracks.size() - 1) {
       if (looping) {
         index = 0;
-      } else if (index == tracks.size() - 1) {
+      } else if (index == tracks.size()) {
         index--;
       }
     }
