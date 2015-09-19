@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import com.tjl.fuse.R;
 import com.tjl.fuse.adapter.SearchAdapter;
+import com.tjl.fuse.player.PlayerManager;
 import java.util.ArrayList;
 import kaaes.spotify.webapi.android.models.Track;
 
@@ -15,6 +16,7 @@ import kaaes.spotify.webapi.android.models.Track;
  */
 public class PlaylistView extends LinearLayout {
   private RecyclerView recyclerView;
+  private PlayerManager playerManager;
 
   public PlaylistView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -23,9 +25,11 @@ public class PlaylistView extends LinearLayout {
   @Override public void onFinishInflate() {
     super.onFinishInflate();
 
+
+    playerManager = PlayerManager.getInstance();
     LinearLayoutManager manager = new LinearLayoutManager(getContext());
     ArrayList<Track> items = new ArrayList<>();
-    items.add(new Track());
+    //items.add(new Track());
     SearchAdapter adapter = new SearchAdapter(items);
 
     recyclerView = (RecyclerView) findViewById(R.id.playlist_view);
