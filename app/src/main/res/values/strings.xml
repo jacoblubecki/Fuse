@@ -1,6 +1,9 @@
 <resources>
   <string name="app_name">Fuse</string>
 
-  <string name="hello_world">Hello world!</string>
-  <string name="action_settings">Settings</string>
+  <!-- Spotfiy -->
+  <string name="spotify_redirect">fuse://spotify/redirect</string>
+
+  <!-- SoundCloud -->
+  <string name="soundcloud_redirect">fuse://soundcloud/redirect</string>
 </resources>
