@@ -80,6 +80,17 @@ public class FuseSearchView extends LinearLayout {
         search(searchView.getQuery().toString());
       }
     });
+    searchView.setOnSearchClickListener(new OnClickListener() {
+      @Override public void onClick(View v) {
+        search(searchView.getQuery().toString()); //TODO made this work ( this means open the search window
+      }
+    });
+    searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+      @Override public boolean onClose() {
+        recyclerView.setAdapter(null);
+        return false;
+      }
+    });
   }
 
   public void search(String query) {
