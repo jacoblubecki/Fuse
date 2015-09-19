@@ -1,4 +1,4 @@
-package com.tjl.fuse.ui;
+package com.tjl.fuse.ui.activities;
 
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;

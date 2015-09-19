@@ -61,10 +61,7 @@ public class FuseSearchView extends LinearLayout {
     LinearLayoutManager manager = new LinearLayoutManager(getContext());
     ArrayList<FuseTrack> items = new ArrayList<>();
     if (playerManager.getQueue() != null) {
-
-      for (FuseTrack track : playerManager.getQueue().getTracks()) {
-        items.add(track);
-      }
+      items = (ArrayList<FuseTrack>) playerManager.getQueue().getTracks();
     }
 
     adapter = new SearchAdapter(items);
@@ -73,6 +70,8 @@ public class FuseSearchView extends LinearLayout {
     recyclerView.setLayoutManager(manager);
     recyclerView.setAdapter(adapter);
 
+    searchView.setIconifiedByDefault(false);
+    
     invalidate();
 
     searchButton.setOnClickListener(new View.OnClickListener() {

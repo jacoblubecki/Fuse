@@ -8,12 +8,13 @@
   <application
       android:name=".FuseApplication"
       android:allowBackup="true"
+      android:fullBackupContent="true"
       android:icon="@drawable/ic_launcher"
       android:label="@string/app_name"
       android:theme="@style/FuseTheme"
       >
     <activity
-        android:name=".activities.FuseActivity"
+        android:name=".ui.activities.FuseActivity"
         android:label="@string/app_name"
         android:launchMode="singleTop"
         >
@@ -37,10 +38,11 @@
     </activity>
 
     <activity
-        android:name=".activities.PlaylistActivity"
-        android:label="@string/title_activity_paylist"
-        >
-    </activity>
+        android:name=".ui.activities.DiscoveryActivity"
+        android:label="@string/title_activity_playlist"
+        android:parentActivityName=".ui.activities.FuseActivity"
+        android:launchMode="singleTop"
+        />
 
     <activity android:name="com.spotify.sdk.android.authentication.LoginActivity"/>
   </application>

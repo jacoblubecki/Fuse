@@ -8,8 +8,6 @@ import android.widget.LinearLayout;
 import com.tjl.fuse.R;
 import com.tjl.fuse.adapter.PlaylistAdapter;
 import com.tjl.fuse.player.PlayerManager;
-import com.tjl.fuse.player.tracks.FuseTrack;
-import java.util.ArrayList;
 
 /**
  * Created by JoshBeridon on 9/19/15.
@@ -27,20 +25,16 @@ public class PlaylistView extends LinearLayout {
 
 
     playerManager = PlayerManager.getInstance();
-    LinearLayoutManager manager = new LinearLayoutManager(getContext());
-    ArrayList<FuseTrack> items = new ArrayList<>();
-    if(playerManager.getQueue()!=null) {
-      items = (ArrayList<FuseTrack>) playerManager.getQueue().getTracks();
+
+
+    if(playerManager.getQueue() != null && playerManager.getQueue().getSize() > 0) {
+      LinearLayoutManager manager = new LinearLayoutManager(getContext());
+      PlaylistAdapter adapter = new PlaylistAdapter(playerManager.getQueue().getTracks());
+
+      recyclerView = (RecyclerView) findViewById(R.id.search_list_view);
+      recyclerView.setLayoutManager(manager);
+      recyclerView.setAdapter(adapter);
+      invalidate();
     }
-
-    //items.add(new Track());
-    PlaylistAdapter adapter = new PlaylistAdapter(items);
-
-    recyclerView = (RecyclerView) findViewById(R.id.search_list_view);
-    recyclerView.setLayoutManager(manager);
-    recyclerView.setAdapter(adapter);
-
-    invalidate();
-
   }
 }
