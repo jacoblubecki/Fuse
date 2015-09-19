@@ -1,14 +1,20 @@
 package com.tjl.fuse.ui;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
+import com.tjl.fuse.R;
+import com.tjl.fuse.adapter.SearchAdapter;
+import java.util.ArrayList;
+import kaaes.spotify.webapi.android.models.Track;
 
 /**
  * Created by JoshBeridon on 9/19/15.
  */
 public class PlaylistView extends LinearLayout {
-
+  private RecyclerView recyclerView;
 
   public PlaylistView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -16,6 +22,17 @@ public class PlaylistView extends LinearLayout {
 
   @Override public void onFinishInflate() {
     super.onFinishInflate();
+
+    LinearLayoutManager manager = new LinearLayoutManager(getContext());
+    ArrayList<Track> items = new ArrayList<>();
+    items.add(new Track());
+    SearchAdapter adapter = new SearchAdapter(items);
+
+    recyclerView = (RecyclerView) findViewById(R.id.playlist_view);
+    recyclerView.setLayoutManager(manager);
+    recyclerView.setAdapter(adapter);
+
+    invalidate();
 
   }
 }
