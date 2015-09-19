@@ -1,4 +1,4 @@
-package com.tjl.fuse.Activities;
+package com.tjl.fuse.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

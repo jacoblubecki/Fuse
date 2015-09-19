@@ -1,61 +1,17 @@
-package com.tjl.fuse.Activities;
+package com.tjl.fuse.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import br.liveo.Model.HelpLiveo;
-import br.liveo.interfaces.OnItemClickListener;
-import br.liveo.navigationliveo.NavigationLiveo;
-import timber.log.Timber;
+import com.tjl.fuse.R;
+import com.tjl.fuse.ui.NavDrawerActivity;
 
-public class FuseActivity extends NavigationLiveo implements OnItemClickListener {
+public class FuseActivity extends NavDrawerActivity {
 
-  private HelpLiveo drawerItem;
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
 
-  @Override public void onInt(Bundle bundle) {
-
-    drawerItem = new HelpLiveo();
-    drawerItem.add("Discover");
-    drawerItem.add("Playlist");
-    drawerItem.add("Search");
-    drawerItem.addSeparator();
-    drawerItem.add("Options");
-
-    with(this).startingPosition(1) //Starting position in the list
-        .addAllHelpItem(drawerItem.getHelp())
-        .build();
-    Timber.plant(new Timber.DebugTree());
-
-  }
-
-  @Override public void onItemClick(int i) {//TODO should make this better
-
-    Timber.e("i is " + i);
-    switch (i) {
-      case 0:{
-        Timber.e("0");
-        Intent intent = new Intent(this, PlaylistActivity.class);
-        startActivity(intent);
-        break;
-      }
-      case 1:{
-        Timber.e("1");
-        Intent intent = new Intent(this, PlaylistActivity.class);
-        startActivity(intent);
-        break;
-      }
-      case 2:{
-        Timber.e("2");
-        Intent intent = new Intent(this, PlaylistActivity.class);
-        startActivity(intent);
-        break;
-      }
-      case 4: {
-        Timber.e("3");
-        Intent intent = new Intent(this, PlaylistActivity.class);
-        startActivity(intent);
-        break;
-      }
-    }
+    setUpNavDrawer(R.id.drawer_layout_home, R.id.list_slidermenu_home);
   }
 }
 
