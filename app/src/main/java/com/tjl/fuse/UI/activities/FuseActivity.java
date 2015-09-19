@@ -1,4 +1,4 @@
-package com.tjl.fuse.activities;
+package com.tjl.fuse.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.tjl.fuse.R;
 import com.tjl.fuse.soundcloud.SoundCloudAuth;
 import com.tjl.fuse.spotify.SpotifyAuth;
-import com.tjl.fuse.ui.NavDrawerActivity;
+import com.tjl.fuse.ui.activities.NavDrawerActivity;
 import com.tjl.fuse.utils.preferences.StringPreference;
 import timber.log.Timber;
 

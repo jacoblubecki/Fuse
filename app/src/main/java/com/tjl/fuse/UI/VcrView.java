@@ -28,6 +28,7 @@ public class VcrView extends LinearLayout {
 
   @Override protected void onFinishInflate() {
     super.onFinishInflate();
+
     previous = (Button) this.findViewById(R.id.previous_button);
     playPause = (Button) this.findViewById(R.id.play_pause_button);
     next = (Button) this.findViewById(R.id.next_button);
