@@ -85,7 +85,7 @@ public class SoundCloudPlayer extends FusePlayer implements MediaPlayer.OnPrepar
   }
 
   @Override public void onCompletion(MediaPlayer mediaPlayer) {
-     changeState(PAUSED);
+     changeState(STOPPED);
   }
 
   @Override public void onPrepared(MediaPlayer mediaPlayer) {

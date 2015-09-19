@@ -42,16 +42,16 @@ public class DiscoveryView extends LinearLayout {
   public void onFinishInflate() {
     super.onFinishInflate();
 
-    cards = (RecyclerView) findViewById(R.id.channels_view);
-    cards.setHasFixedSize(true);
-
     LinearLayoutManager manager = new LinearLayoutManager(getContext());
-    cards.setLayoutManager(manager);
 
     ArrayList<ChannelItem> items = new ArrayList<>();
     items.add(new ChannelItem("Test", ""));
 
     ChannelRecyclerAdapter adapter = new ChannelRecyclerAdapter(items);
+
+    cards = (RecyclerView) findViewById(R.id.channels_view);
+    cards.setLayoutManager(manager);
     cards.setAdapter(adapter);
+    cards.setHasFixedSize(true);
   }
 }

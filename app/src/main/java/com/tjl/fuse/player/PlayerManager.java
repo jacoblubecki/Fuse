@@ -71,11 +71,19 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
     if(checkHasAudioFocus()) {
       switch (currentTrack.type) {
         case SPOTIFY:
-          spotify.play();
+          if(spotify.state == State.PAUSED) {
+            spotify.play();
+          } else {
+            spotify.start(currentTrack.play_uri);
+          }
           break;
 
         case SOUNDCLOUD:
-          soundcloud.play();
+          if(soundcloud.state == State.PAUSED) {
+            soundcloud.play();
+          } else {
+            soundcloud.start(currentTrack.play_uri);
+          }
           break;
 
         default:
