@@ -37,16 +37,15 @@ public class FuseSearchView extends LinearLayout {
   private PlayerManager playerManager;
   private RecyclerView recyclerView;
   SearchAdapter adapter;
-
+  Context context;
 
   public FuseSearchView(Context context, AttributeSet attrs) {
     super(context, attrs);
+    this.context = context;
   }
 
   @Override public void onFinishInflate() {
     super.onFinishInflate();
-
-
 
     String tokenKey = getContext().getString(R.string.spotify_token_key);
     String token = new StringPreference(getContext(), tokenKey).get();
@@ -62,13 +61,14 @@ public class FuseSearchView extends LinearLayout {
     playerManager = PlayerManager.getInstance();
     LinearLayoutManager manager = new LinearLayoutManager(getContext());
     ArrayList<FuseTrack> items = new ArrayList<>();
-    if(playerManager.getQueue()!=null) {
+    if (playerManager.getQueue() != null) {
 
       for (FuseTrack track : playerManager.getQueue().getTracks()) {
         items.add(track);
       }
     }
-   adapter = new SearchAdapter(items);
+
+    adapter = new SearchAdapter(items);
 
     recyclerView = (RecyclerView) findViewById(R.id.search_list_view);
     recyclerView.setLayoutManager(manager);
@@ -76,14 +76,11 @@ public class FuseSearchView extends LinearLayout {
 
     invalidate();
 
-
     searchButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         search(searchView.getQuery().toString());
       }
     });
-
-
   }
 
   public void search(String query) {
@@ -101,7 +98,15 @@ public class FuseSearchView extends LinearLayout {
         }
         playerManager.setQueue(new Queue(fuseTracks));
         playerManager.play();
-        adapter.notifyDataSetChanged();//TODO make this list show once it has been searched 
+        ArrayList<FuseTrack> items = new ArrayList<>();
+        items = (ArrayList<FuseTrack>) playerManager.getQueue().getTracks();
+
+        adapter = new SearchAdapter(items);
+
+        recyclerView.setAdapter(adapter);
+
+
+        adapter.notifyDataSetChanged();//TODO make this list show once it has been searched
       }
 
       @Override public void failure(RetrofitError error) {
