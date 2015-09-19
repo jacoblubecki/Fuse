@@ -6,9 +6,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import com.tjl.fuse.R;
+import kaaes.spotify.webapi.android.SpotifyApi;
+import kaaes.spotify.webapi.android.SpotifyService;
+import kaaes.spotify.webapi.android.models.TracksPager;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import timber.log.Timber;
 
 public class PlaylistActivity extends AppCompatActivity {
+  Button search;
+  SpotifyService spotify;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -20,6 +30,20 @@ public class PlaylistActivity extends AppCompatActivity {
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+    search = (Button) findViewById(R.id.search_button);
+    SpotifyApi api = new SpotifyApi();
+    api.setAccessToken( getResources().getString(R.string.spotify_token_key));
+
+    spotify = api.getService();
+
+
+
+    search.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        search();
+      }
+    });
 
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
@@ -46,5 +70,17 @@ public class PlaylistActivity extends AppCompatActivity {
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  public void search(){
+    spotify.searchTracks("magic", new Callback<TracksPager>() {
+      @Override public void success(TracksPager tracksPager, Response response) {
+        Timber.e(response.toString());
+      }
+
+      @Override public void failure(RetrofitError error) {
+        Timber.e(error.getMessage());
+      }
+    });
   }
 }

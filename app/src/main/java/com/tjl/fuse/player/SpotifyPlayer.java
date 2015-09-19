@@ -1,7 +1,6 @@
 package com.tjl.fuse.player;
 
 import android.content.Context;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
@@ -13,7 +12,9 @@ import com.tjl.fuse.R;
 import com.tjl.fuse.utils.preferences.StringPreference;
 import timber.log.Timber;
 
-import static com.tjl.fuse.player.State.*;
+import static com.tjl.fuse.player.State.PAUSED;
+import static com.tjl.fuse.player.State.PLAYING;
+import static com.tjl.fuse.player.State.STOPPED;
 
 /**
  * Created by Jacob on 9/18/15.
@@ -25,7 +26,7 @@ public class SpotifyPlayer extends FusePlayer
   private MediaPlayer.OnCompletionListener listener;
 
   public SpotifyPlayer(Context context) {
-    String tokenKey = context.getString(R.string.spotify_token_key);
+    String tokenKey =  context.getResources().getString(R.string.spotify_token_key);
     String clientId = context.getString(R.string.spotify_client_id);
     String authToken = new StringPreference(context, tokenKey).get();
 

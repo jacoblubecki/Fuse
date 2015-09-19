@@ -18,43 +18,39 @@ public class VcrView extends LinearLayout {
   private Button playPause;
   private Button next;
 
-
   private final Context context;
 
   public VcrView(Context context, AttributeSet attrs) {
     super(context, attrs);
     this.context = context;
-    playerManager = PlayerManager.getInstance();
-
+    //playerManager = PlayerManager.getInstance();
   }
 
-  @Override
-  protected void onFinishInflate(){
+  @Override protected void onFinishInflate() {
     super.onFinishInflate();
-    previous = (Button) findViewById(R.id.previous);
-    playPause = (Button) findViewById(R.id.play_pause);
-    next = (Button) findViewById(R.id.next);
-
+    previous = (Button) this.findViewById(R.id.previous_button);
+    playPause = (Button) this.findViewById(R.id.play_pause_button);
+    next = (Button) this.findViewById(R.id.next_button);
 
     previous.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
-        playerManager.previous();
+     //   playerManager.previous();
       }
     });
 
     next.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
-        playerManager.next();
+       // playerManager.next();
       }
     });
 
     playPause.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
-        if(playerManager.isPlaying()){
+       /* if (playerManager.isPlaying()) {
           playerManager.pause();
         } else {
           playerManager.play();
-        }
+        }*/
       }
     });
   }

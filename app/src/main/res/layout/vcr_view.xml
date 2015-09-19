@@ -9,22 +9,18 @@
       android:layout_height="wrap_content"
       android:layout_width="0dp"
       android:layout_weight="1"
-      android:id="@+id/previous"
-      android:text="previous"
       />
 
   <Button
       android:layout_height="wrap_content"
       android:layout_width="0dp"
       android:layout_weight="1"
-      android:id="@+id/play_pause"
-      android:text="play/pause"/>
+      />
 
   <Button
       android:layout_height="wrap_content"
       android:layout_width="0dp"
       android:layout_weight="1"
-      android:id="@+id/next"
-      android:text="next"/>
+      />
 
 </com.tjl.fuse.UI.VcrView>

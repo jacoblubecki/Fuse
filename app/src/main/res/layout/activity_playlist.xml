@@ -16,12 +16,13 @@
   </android.support.v7.widget.Toolbar>
 
 
-    <TextView
+    <Button
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#32e212"
-        android:text="TESTTEST"
+        android:text="search"
+        android:id="@+id/search_button"
         android:layout_below="@+id/toolbar"/>
 
     <com.tjl.fuse.UI.VcrView
@@ -31,7 +32,7 @@
         android:background="#ff2500"
         android:weightSum="3"
         >
-        <TextView
+        <Button
             android:id="@+id/previous_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -40,8 +41,8 @@
             android:text="previous"
             android:textSize="24sp"/>
 
-        <TextView
-            android:id="@+id/play_button"
+        <Button
+            android:id="@+id/play_pause_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -50,7 +51,7 @@
             android:textSize="24sp"
             />
 
-        <TextView
+        <Button
             android:id="@+id/next_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
