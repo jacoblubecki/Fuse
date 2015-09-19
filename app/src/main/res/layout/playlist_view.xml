@@ -12,15 +12,7 @@
       >
 
 
-    <Button
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#32e212"
-        android:text="search"
-        android:id="@+id/search_button"
-        android:layout_below="@+id/toolbar"
-        />
+
 
     <com.tjl.fuse.ui.VcrView
         android:layout_width="match_parent"
