@@ -13,7 +13,6 @@ import com.tjl.fuse.R;
 import com.tjl.fuse.adapter.SearchAdapter;
 import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.player.tracks.FuseTrack;
-import com.tjl.fuse.player.tracks.Queue;
 import com.tjl.fuse.utils.preferences.StringPreference;
 import java.util.ArrayList;
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -93,15 +92,9 @@ public class FuseSearchView extends LinearLayout {
         for (Track t : tracksPager.tracks.items) {
           FuseTrack fuseTrack = new FuseTrack(t);
           fuseTracks.add(fuseTrack);
-          //TODO populate a list of shit
-
         }
-        playerManager.setQueue(new Queue(fuseTracks));
-        playerManager.play();
-        ArrayList<FuseTrack> items = new ArrayList<>();
-        items = (ArrayList<FuseTrack>) playerManager.getQueue().getTracks();
 
-        adapter = new SearchAdapter(items);
+        adapter = new SearchAdapter(fuseTracks);
 
         recyclerView.setAdapter(adapter);
 
