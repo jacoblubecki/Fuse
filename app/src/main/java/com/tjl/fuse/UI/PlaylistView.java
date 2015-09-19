@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import com.tjl.fuse.R;
+import com.tjl.fuse.utils.preferences.StringPreference;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.TracksPager;
@@ -28,9 +29,12 @@ public class PlaylistView extends LinearLayout {
   @Override public void onFinishInflate() {
     super.onFinishInflate();
 
+    String tokenKey = getContext().getString(R.string.spotify_token_key);
+    String token = new StringPreference(getContext(), tokenKey).get();
+
     search = (Button) findViewById(R.id.search_button);
     SpotifyApi api = new SpotifyApi();
-    api.setAccessToken(getResources().getString(R.string.spotify_token_key));
+    api.setAccessToken(token);
 
     spotify = api.getService();
 
@@ -44,7 +48,7 @@ public class PlaylistView extends LinearLayout {
   public void search() {
     spotify.searchTracks("magic", new Callback<TracksPager>() {
       @Override public void success(TracksPager tracksPager, Response response) {
-        Timber.e(response.toString());
+        Timber.e(tracksPager.tracks.items.get(0).name);
       }
 
       @Override public void failure(RetrofitError error) {

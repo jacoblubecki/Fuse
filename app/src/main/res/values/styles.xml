@@ -1,9 +1,28 @@
 <resources>
 
   <!-- Base application theme. -->
-  <style name="myTheme"
+  <style name="FuseTheme"
       parent="Theme.AppCompat.Light.NoActionBar">
     <!-- Customize your theme here. -->
+
+    <item name="colorPrimary">@color/fuse_primary</item>
+    <item name="colorAccent">@color/fuse_accent</item>
+    <item name="colorPrimaryDark">@color/fuse_primary_dark</item>
+
+  </style>
+
+  <style name="FuseNavDrawer" parent="Base.Widget.AppCompat.ListView">
+    <item name="android:background">@color/fuse_light_grey</item>
+    <item name="android:listSelector">@drawable/list_selector</item>
+  </style>
+
+  <style name="FuseToolbar" parent="FuseTheme">
+    <item name="android:background">@color/fuse_primary</item>
+    <item name="android:minHeight">?attr/actionBarSize</item>
+    <item name="elevation">8dp</item>
+    <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+
   </style>
 
 </resources>

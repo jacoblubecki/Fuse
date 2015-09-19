@@ -5,19 +5,20 @@
     tools:context="com.tjl.fuse.activities.PlaylistActivity"
     android:weightSum="3"
     >
-  <Button
+
+  <Button android:id="@+id/previous_button"
       android:layout_height="wrap_content"
       android:layout_width="0dp"
       android:layout_weight="1"
       />
 
-  <Button
+  <Button android:id="@+id/play_pause_button"
       android:layout_height="wrap_content"
       android:layout_width="0dp"
       android:layout_weight="1"
       />
 
-  <Button
+  <Button android:id="@+id/next_button"
       android:layout_height="wrap_content"
       android:layout_width="0dp"
       android:layout_weight="1"

@@ -1,35 +1,15 @@
-<com.tjl.fuse.ui.PlaylistView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_height="match_parent"
-    tools:context="com.tjl.fuse.activities.PlaylistActivity"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
     >
 
-  <android.support.v7.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:minHeight="?attr/actionBarSize"
-      android:background="#2196F3"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      >
-  </android.support.v7.widget.Toolbar>
-
-
-  <android.support.v4.widget.DrawerLayout
-      android:id="@+id/drawer_layout_home"
+  <com.tjl.fuse.ui.PlaylistView xmlns:android="http://schemas.android.com/apk/res/android"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:orientation="vertical"
       >
-
-    <ListView
-        android:id="@+id/list_slidermenu_home"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:dividerHeight="1dp"
-        />
 
 
     <Button
@@ -80,7 +60,6 @@
           />
     </com.tjl.fuse.ui.VcrView>
 
-  </android.support.v4.widget.DrawerLayout>
+  </com.tjl.fuse.ui.PlaylistView>
+</LinearLayout>
 
-
-</com.tjl.fuse.ui.PlaylistView>

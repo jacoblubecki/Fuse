@@ -12,10 +12,9 @@ import timber.log.Timber;
  */
 public class FuseApplication extends Application {
 
-  @Singleton
-  @Component(modules = ApplicationModule.class)
-  public interface AppComponent {
+  @Singleton @Component(modules = ApplicationModule.class) public interface AppComponent {
     void inject(FuseApplication application);
+
     void inject(PlayerManager manager);
   }
 
@@ -28,9 +27,7 @@ public class FuseApplication extends Application {
 
     LeakCanary.install(this);
 
-    if(BuildConfig.DEBUG) {
-      Timber.plant(new Timber.DebugTree());
-    }
+    Timber.plant(new Timber.DebugTree());
   }
 
   public static FuseApplication getApplication() {

@@ -1,6 +1,7 @@
 package com.tjl.fuse.ui;
 
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,6 +16,8 @@ import com.tjl.fuse.R;
 import com.tjl.fuse.adapter.NavDrawerListAdapter;
 import com.tjl.fuse.models.NavDrawerItem;
 import java.util.ArrayList;
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
+import timber.log.Timber;
 
 /**
  * Created by Jacob on 9/19/15.
@@ -24,24 +27,46 @@ public class NavDrawerActivity extends AppCompatActivity {
   private ListView mDrawerList;
   private ActionBarDrawerToggle mDrawerToggle;
 
+  private SlideMenuClickListener listener = new SlideMenuClickListener();
+  private ArrayList<NavDrawerItem> navDrawerItems = new ArrayList<>();
+  private NavDrawerListAdapter adapter;
+
+  @Override public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    // adding nav drawer items to array
+    Drawable discovery = MaterialDrawableBuilder.with(this).setIcon(
+        MaterialDrawableBuilder.IconValue.HEADPHONES)
+        .build();
+
+    Drawable playlist = MaterialDrawableBuilder.with(this)
+        .setIcon(MaterialDrawableBuilder.IconValue.FORMAT_LIST_BULLETED)
+        .build();
+
+    Drawable search = MaterialDrawableBuilder.with(this)
+        .setIcon(MaterialDrawableBuilder.IconValue.MAGNIFY)
+        .build();
+
+    Drawable settings = MaterialDrawableBuilder.with(this)
+        .setIcon(MaterialDrawableBuilder.IconValue.SETTINGS)
+        .build();
+
+    navDrawerItems.add(new NavDrawerItem("Discovery", discovery));
+    navDrawerItems.add(new NavDrawerItem("Playlist", playlist));
+    navDrawerItems.add(new NavDrawerItem("Search", search));
+    navDrawerItems.add(new NavDrawerItem("Settings", settings));
+
+
+    // setting the nav drawer list adapter
+    adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
+  }
+
   protected void setUpNavDrawer(int drawerID, int listID) {
-
-
     mDrawerLayout = (DrawerLayout) findViewById(drawerID);
     mDrawerList = (ListView) findViewById(listID);
 
-    ArrayList<NavDrawerItem> navDrawerItems = new ArrayList<>();
-
-    // adding nav drawer items to array
-    navDrawerItems.add(new NavDrawerItem("Test", R.drawable.ic_launcher)); //Home
-    navDrawerItems.add(new NavDrawerItem("Test", R.drawable.ic_launcher)); //Home
-    navDrawerItems.add(new NavDrawerItem("Test", R.drawable.ic_launcher)); //Home
-
-    mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
-
-    // setting the nav drawer list adapter
-    NavDrawerListAdapter adapter1 = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
-    mDrawerList.setAdapter(adapter1);
+    mDrawerList.setAdapter(adapter);
+    mDrawerList.setOnItemClickListener(listener);
 
     mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
       public void onDrawerClosed(View view) {
@@ -93,7 +118,7 @@ public class NavDrawerActivity extends AppCompatActivity {
   public boolean onPrepareOptionsMenu(Menu menu) {
     // if nav drawer is opened, hide the action items
     boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-    menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+    //menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
     return super.onPrepareOptionsMenu(menu);
   }
 
@@ -105,6 +130,8 @@ public class NavDrawerActivity extends AppCompatActivity {
     mDrawerList.setItemChecked(position, true);
     mDrawerList.setSelection(position);
     mDrawerLayout.closeDrawer(mDrawerList);
+
+    Timber.i("Display view.");
   }
 
   @Override

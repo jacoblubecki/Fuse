@@ -19,26 +19,23 @@ import static lubecki.soundcloud.webapi.android.models.AuthenticationResponse.*;
  */
 public class SoundCloudAuth {
 
-  /**
-   * Redirect URI for SoundCloud.
-   */
-  public static final String REDIRECT_URI = "birdcage://soundcloud/redirect";
-
   private SoundCloudAuth() {
     // No instances.
   }
   public static void startSoundCloudAuthActivity(Context context) {
-    String secretClientId = context.getString(R.string.soundcloud_client_secret);
+    String secretClientId = context.getString(R.string.soundcloud_client_id);
+    String redirect = context.getString(R.string.soundcloud_redirect);
 
-    SoundCloudAuthenticator.openLoginActivity(context, REDIRECT_URI, secretClientId);
+    SoundCloudAuthenticator.openLoginActivity(context, redirect, secretClientId);
   }
 
   public static void handleSoundCloudAuthCallback(final Context context, Intent intent) {
     String clientId = context.getString(R.string.soundcloud_client_id);
     String clientSecret = context.getString(R.string.soundcloud_client_secret);
+    String redirect = context.getString(R.string.soundcloud_redirect);
 
     final Authenticator auth =
-        SoundCloudAuthenticator.handleResponse(intent, REDIRECT_URI, clientId, clientSecret);
+        SoundCloudAuthenticator.handleResponse(intent, redirect, clientId, clientSecret);
 
     SoundCloudAuthenticator.AuthService service = SoundCloudAuthenticator.getAuthService();
 

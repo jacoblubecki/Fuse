@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="fuse_primary">#F97242</color>
+  <color name="fuse_accent">#FFBB9B</color>
+  <color name="fuse_primary_dark">#D75020</color>
+
+  <color name="fuse_light_grey">#DDDDDD</color>
+</resources>

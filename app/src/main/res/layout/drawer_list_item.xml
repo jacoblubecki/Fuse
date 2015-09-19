@@ -17,16 +17,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_toRightOf="@id/icon"
-        android:layout_toLeftOf="@+id/counter"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textColor="#FFFFFF"
-        android:gravity="center_vertical"/>
-
-    <TextView android:id="@+id/counter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:textColor="#FFFFFF"/>
+        android:gravity="center_vertical"
+        android:textColor="@color/md_grey_800"/>
 
 </RelativeLayout>
