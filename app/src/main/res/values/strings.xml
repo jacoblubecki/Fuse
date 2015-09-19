@@ -6,4 +6,9 @@
 
   <!-- SoundCloud -->
   <string name="soundcloud_redirect">fuse://soundcloud/redirect</string>
+  <string name="soundcloud_token_key">soundcloud_token_key</string>
+
+  <!-- Preferences -->
+  <string name="shared_prefs_name">fuse_preferences</string>
+  <string name="spotify_token_key">spotify_token_key</string>
 </resources>
