@@ -91,6 +91,7 @@ public class SpotifyPlayer extends FusePlayer
 
       case END_OF_CONTEXT:
         pause();
+        changeState(STOPPED);
         listener.onCompletion(null);
         break;
 
