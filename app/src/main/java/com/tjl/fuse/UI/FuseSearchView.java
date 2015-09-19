@@ -91,6 +91,17 @@ public class FuseSearchView extends LinearLayout {
         return false;
       }
     });
+    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override public boolean onQueryTextSubmit(String query) {
+        return false;
+      }
+
+      @Override public boolean onQueryTextChange(String newText) {
+        if(newText.compareTo("")==0)
+          recyclerView.setAdapter(null);
+        return false;
+      }
+    });
   }
 
   public void search(String query) {
