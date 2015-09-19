@@ -8,8 +8,8 @@ import android.widget.LinearLayout;
 import com.tjl.fuse.R;
 import com.tjl.fuse.adapter.SearchAdapter;
 import com.tjl.fuse.player.PlayerManager;
+import com.tjl.fuse.player.tracks.FuseTrack;
 import java.util.ArrayList;
-import kaaes.spotify.webapi.android.models.Track;
 
 /**
  * Created by JoshBeridon on 9/19/15.
@@ -28,11 +28,17 @@ public class PlaylistView extends LinearLayout {
 
     playerManager = PlayerManager.getInstance();
     LinearLayoutManager manager = new LinearLayoutManager(getContext());
-    ArrayList<Track> items = new ArrayList<>();
+    ArrayList<FuseTrack> items = new ArrayList<>();
+    if(playerManager.getQueue()!=null) {
+
+      for (FuseTrack track : playerManager.getQueue().getTracks()) {
+        items.add(track);
+      }
+    }
     //items.add(new Track());
     SearchAdapter adapter = new SearchAdapter(items);
 
-    recyclerView = (RecyclerView) findViewById(R.id.playlist_view);
+    recyclerView = (RecyclerView) findViewById(R.id.search_list_view);
     recyclerView.setLayoutManager(manager);
     recyclerView.setAdapter(adapter);
   }
