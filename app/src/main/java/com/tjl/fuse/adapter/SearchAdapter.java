@@ -9,31 +9,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.tjl.fuse.R;
+import com.tjl.fuse.player.tracks.FuseTrack;
 import java.util.List;
-import kaaes.spotify.webapi.android.models.Track;
 
 /**
  * Created by JoshBeridon on 9/19/15.
  */
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewHolder> {
 
-  private List<Track> tracks;
+  private List<FuseTrack> tracks;
 
-  public SearchAdapter(List<Track> tracks) {
+  public SearchAdapter(List<FuseTrack> tracks) {
     this.tracks = tracks;
   }
 
   @Override public TrackViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view =
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_card, parent, false);
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.track_card, parent, false);
 
     return new TrackViewHolder(view);
   }
 
   @Override public void onBindViewHolder(TrackViewHolder holder, int position) {
-    holder.text.setText(tracks.get(position).name);
+    holder.text.setText(tracks.get(position).title);
     Picasso.with(holder.card.getContext())
-        .load(tracks.get(position).album.images.get(0).url)
+        .load(tracks.get(position).image_url)
         .into(holder.image);
   }
 
