@@ -1,4 +1,4 @@
-package com.tjl.fuse.UI;
+package com.tjl.fuse.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -53,5 +53,6 @@ public class VcrView extends LinearLayout {
         }*/
       }
     });
+
   }
 }

@@ -1,8 +1,8 @@
-<com.tjl.fuse.UI.VcrView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.tjl.fuse.ui.VcrView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.tjl.fuse.Activities.PlaylistActivity"
+    tools:context="com.tjl.fuse.activities.PlaylistActivity"
     android:weightSum="3"
     >
   <Button
@@ -23,4 +23,4 @@
       android:layout_weight="1"
       />
 
-</com.tjl.fuse.UI.VcrView>
+</com.tjl.fuse.ui.VcrView>

@@ -14,8 +14,6 @@ public class SoundCloudPlayer extends FusePlayer implements MediaPlayer.OnPrepar
 
   private MediaPlayer player;
 
-  private boolean allowPrepare = true;
-
   public SoundCloudPlayer() {
     player = new MediaPlayer();
   }
@@ -25,7 +23,6 @@ public class SoundCloudPlayer extends FusePlayer implements MediaPlayer.OnPrepar
   }
 
   public void start(String uri) {
-    allowPrepare = true;
 
     uri += "/stream?client_id=55de8cc1d6246dd72e0a78b1c70fd91a";
 
@@ -41,6 +38,11 @@ public class SoundCloudPlayer extends FusePlayer implements MediaPlayer.OnPrepar
     }catch(IOException e){
       e.printStackTrace();
     }
+  }
+
+  public void stopPreparing() {
+    changeState(STOPPED);
+    player.reset();
   }
 
   @Override public void play() {
