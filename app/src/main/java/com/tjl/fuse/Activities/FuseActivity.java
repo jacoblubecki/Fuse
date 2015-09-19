@@ -1,4 +1,4 @@
-package com.tjl.fuse;
+package com.tjl.fuse.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
