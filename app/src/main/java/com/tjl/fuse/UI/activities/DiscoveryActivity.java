@@ -6,11 +6,14 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import com.spotify.sdk.android.authentication.LoginActivity;
 import com.tjl.fuse.FuseApplication;
 import com.tjl.fuse.R;
+import com.tjl.fuse.adapter.PlaylistAdapter;
 import com.tjl.fuse.models.Album;
 import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.player.tracks.FuseTrack;
@@ -31,7 +34,6 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import timber.log.Timber;
 
-
 /**
  * Created by Jacob on 9/19/15.
  */
@@ -40,6 +42,10 @@ public class DiscoveryActivity extends AppCompatActivity {
   SpotifyService spotify;
   PlayerManager playerManager;
   ArrayList<FuseTrack> fuseTracks;
+  protected RecyclerView recyclerView;
+  LinearLayoutManager manager;
+  PlaylistAdapter adapter;
+
 
   public static String EXTRA_PLAYLIST_VALUE = "EXTRA_PLAYLIST_VALUE";
 
@@ -56,6 +62,7 @@ public class DiscoveryActivity extends AppCompatActivity {
     fuseTracks = new ArrayList<>();
 
     playerManager = PlayerManager.getInstance();
+
     //spotify
     String tokenKey = getApplicationContext().getString(R.string.spotify_token_key);
     String token = new StringPreference(getApplicationContext(), tokenKey).get();
@@ -66,6 +73,16 @@ public class DiscoveryActivity extends AppCompatActivity {
     spotify = api.getService();
 
     handleIntent(getIntent());
+
+
+    if (playerManager.getQueue() != null && playerManager.getQueue().getSize() > 0) {
+      manager = new LinearLayoutManager(getApplicationContext());
+      adapter = new PlaylistAdapter(fuseTracks);
+
+      recyclerView = (RecyclerView) findViewById(R.id.playlist_view);
+      recyclerView.setLayoutManager(manager);
+      recyclerView.setAdapter(adapter);
+    }
   }
 
   public void handleIntent(Intent intent) {
@@ -103,13 +120,20 @@ public class DiscoveryActivity extends AppCompatActivity {
                 public void success(Pager<PlaylistSimple> playlistSimplePager, Response response) {
                   //spotifyTracks.add();
                   Timber.e("this us the playlist name" + playlistSimplePager.items.get(0).name);
-                  spotify.getPlaylist(playlistSimplePager.items.get(0).owner.id, playlistSimplePager.items.get(0).id,
-                      new Callback<Playlist>() {
+                  spotify.getPlaylist(playlistSimplePager.items.get(0).owner.id,
+                      playlistSimplePager.items.get(0).id, new Callback<Playlist>() {
                         @Override public void success(Playlist playlist, Response response) {
                           ArrayList<FuseTrack> spotifyTracks = new ArrayList<>();
                           for (PlaylistTrack playlistTrack : playlist.tracks.items) {
                             spotifyTracks.add(new FuseTrack(playlistTrack.track));
                           }
+                          manager = new LinearLayoutManager(getApplicationContext());
+                          adapter = new PlaylistAdapter(fuseTracks);
+
+                          recyclerView = (RecyclerView) findViewById(R.id.playlist_view);
+                          recyclerView.setLayoutManager(manager);
+                          recyclerView.setAdapter(adapter);
+                          adapter.notifyDataSetChanged();
                         }
 
                         @Override public void failure(RetrofitError error) {
@@ -148,27 +172,27 @@ public class DiscoveryActivity extends AppCompatActivity {
     FuseApplication.serializePlaylist();
 
     FuseApplication app = FuseApplication.getApplication();
-    if(!(app.isServiceRunning(DiscoveryActivity.class) ||
+    if (!(app.isServiceRunning(DiscoveryActivity.class) ||
         app.isServiceRunning(LoginActivity.class)) &&
+        PlayerManager.getInstance().getQueue() != null && 
         PlayerManager.getInstance().getQueue().getSize() > 0 &&
         PlayerManager.getInstance().isPlaying()) {
       startService();
     }
   }
 
-  @Override
-  public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+  @Override public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
 
     AudioManager manager = (AudioManager) getSystemService(AUDIO_SERVICE);
 
     switch (keyCode) {
       case KeyEvent.KEYCODE_VOLUME_UP:
-        manager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-            AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+        manager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE,
+            AudioManager.FLAG_SHOW_UI);
         return true;
       case KeyEvent.KEYCODE_VOLUME_DOWN:
-        manager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-            AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+        manager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER,
+            AudioManager.FLAG_SHOW_UI);
         return true;
 
       default:
