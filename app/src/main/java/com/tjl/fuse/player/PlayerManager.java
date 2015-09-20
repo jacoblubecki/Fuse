@@ -1,11 +1,18 @@
 package com.tjl.fuse.player;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import com.parse.ParseObject;
+import com.tjl.fuse.Fuse;
 import com.tjl.fuse.FuseApplication;
 import com.tjl.fuse.player.tracks.FuseTrack;
 import com.tjl.fuse.player.tracks.Queue;
+import com.tjl.fuse.service.Constants;
+import com.tjl.fuse.service.ForegroundService;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import timber.log.Timber;
 
 /**
@@ -18,7 +25,6 @@ public class PlayerManager
   private SoundCloudPlayer soundcloud;
 
   private Queue queue;
-  private FuseTrack currentTrack;
 
   private AudioManager manager;
   private boolean wasPlayingAtTransientLoss = false;
@@ -44,13 +50,8 @@ public class PlayerManager
   }
 
   public void setQueue(Queue queue) {
+    Timber.i("Queue was set at position " + queue.getCurrent());
     this.queue = queue;
-
-    if (queue.getSize() > 0) {
-      currentTrack = queue.current();
-    } else {
-      Timber.w("Nothing in queue to play.");
-    }
   }
 
   public Queue getQueue() {
@@ -73,15 +74,29 @@ public class PlayerManager
     }
   }
 
+  public FuseTrack getPreviousTrack() {
+    return queue.getPrevious();
+  }
+
+  public FuseTrack getNextTrack() {
+    return queue.getNext();
+  }
+
   public void play() {
+    pause();
+
     if (queue != null && queue.getSize() > 0) {
       if (checkHasAudioFocus()) {
-        switch (currentTrack.type) {
+        switch (queue.current().type) {
           case SPOTIFY:
             if (spotify.state == State.PAUSED) {
               spotify.play();
             } else {
-              spotify.start(currentTrack.play_uri);
+              spotify.start(queue.current().play_uri);
+
+              ParseObject track = new ParseObject("Track");
+              track.put("trackId", queue.current().play_uri);
+              track.saveInBackground();
             }
             break;
 
@@ -89,13 +104,25 @@ public class PlayerManager
             if (soundcloud.state == State.PAUSED) {
               soundcloud.play();
             } else {
-              soundcloud.start(currentTrack.play_uri);
+              soundcloud.start(queue.current().play_uri);
+
+              Pattern pattern = Pattern.compile("/([^/]*)$");
+              Matcher matcher = pattern.matcher(queue.current().play_uri);
+
             }
             break;
 
           default:
-            Timber.e("Unrecognized track type: " + currentTrack.type);
+            Timber.e("Unrecognized track type: " + queue.current().type);
             break;
+        }
+
+        FuseApplication app = FuseApplication.getApplication();
+        if (app.isServiceRunning(ForegroundService.class)) {
+          Intent startIntent =
+              new Intent(FuseApplication.getApplication(), ForegroundService.class);
+          startIntent.setAction(Constants.ACTION.START_FOREGROUND_ACTION);
+          app.startService(startIntent);
         }
       } else {
         Timber.e("Can't play. Fuse doesn't have audio focus.");
@@ -106,27 +133,38 @@ public class PlayerManager
   }
 
   public void pause() {
-    spotify.pause();
-    soundcloud.pause();
+    if (isPlaying()) {
+      spotify.pause();
+      soundcloud.pause();
+    }
   }
 
   public void next() {
+    pause();
+    soundcloud.stopPreparing();
+
     if (queue != null && queue.getSize() > 0) {
       if (checkHasAudioFocus()) {
-        currentTrack = queue.next();
+        queue.next();
 
-        switch (currentTrack.type) {
-          case SPOTIFY:
-            spotify.start(currentTrack.play_uri);
-            break;
+        if (!queue.endReached()) {
 
-          case SOUNDCLOUD:
-            soundcloud.start(currentTrack.play_uri);
-            break;
+          switch (queue.current().type) {
+            case SPOTIFY:
+              spotify.start(queue.current().play_uri);
+              break;
 
-          default:
-            Timber.e("Tried to play a track of unknown type.");
-            break;
+            case SOUNDCLOUD:
+              soundcloud.start(queue.current().play_uri);
+              break;
+
+            default:
+              Timber.e("Tried to play a track of unknown type.");
+              break;
+          }
+        } else {
+          Timber.i("The end of the queue was reached.");
+          queue.setCurrent(0);
         }
       } else {
         Timber.e("Can't play next. Fuse doesn't have audio focus.");
@@ -137,17 +175,20 @@ public class PlayerManager
   }
 
   public void previous() {
+    pause();
+    soundcloud.stopPreparing();
+
     if (queue != null && queue.getSize() > 0) {
       if (checkHasAudioFocus()) {
-        currentTrack = queue.previous();
+        queue.previous();
 
-        switch (currentTrack.type) {
+        switch (queue.current().type) {
           case SPOTIFY:
-            spotify.start(currentTrack.play_uri);
+            spotify.start(queue.current().play_uri);
             break;
 
           case SOUNDCLOUD:
-            soundcloud.start(currentTrack.play_uri);
+            soundcloud.start(queue.current().play_uri);
             break;
 
           default:
@@ -166,20 +207,15 @@ public class PlayerManager
     return spotify.state == State.PLAYING || soundcloud.state == State.PLAYING;
   }
 
+  public void reset() {
+    soundcloud.reset();
+    spotify.reset();
+  }
+
   public void release() {
     soundcloud.release();
     spotify.release();
     instance = null;
-  }
-
-  public void notifyDataSetChanged() {
-    if(queue.getSize() > 0) {
-      queue.notifyDataSetChanged();
-      currentTrack = queue.current();
-      play();
-    } else {
-      pause();
-    }
   }
 
   public boolean checkHasAudioFocus() {
@@ -196,15 +232,20 @@ public class PlayerManager
 
   @Override public void onAudioFocusChange(int focusChange) {
     if (spotify.state != State.STOPPED) {
-      if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-        Timber.i("FOCUS LOST TRANSIENT");
-        if (isPlaying()) {
-          pause();
-          wasPlayingAtTransientLoss = isPlaying();
-        }
-      } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-        if (wasPlayingAtTransientLoss) {
-          switch (currentTrack.type) {
+
+      switch (focusChange) {
+        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+          Timber.i("FOCUS LOST TRANSIENT");
+          if (isPlaying()) {
+            pause();
+            wasPlayingAtTransientLoss = isPlaying();
+          }
+          break;
+
+        case AudioManager.AUDIOFOCUS_GAIN:
+          Timber.i("FOCUS GAINED");
+
+          switch (queue.current().type) {
             case SPOTIFY:
               spotify.play();
               break;
@@ -217,13 +258,22 @@ public class PlayerManager
               Timber.e("Tried to play a track of unknown type.");
               break;
           }
-        }
-      } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-        pause();
+          break;
+
+        case AudioManager.AUDIOFOCUS_LOSS:
+          Timber.i("FOCUS LOST");
+          pause();
+          break;
+
+        default:
+          Timber.i("AUDIO STATE CHANGE NOT HANDLED.");
+          break;
       }
 
       if (wasPlayingAtTransientLoss) {
-        // Launch service
+        Intent startIntent = new Intent(FuseApplication.getApplication(), ForegroundService.class);
+        startIntent.setAction(Constants.ACTION.START_FOREGROUND_ACTION);
+        FuseApplication.getApplication().startService(startIntent);
       }
     }
   }

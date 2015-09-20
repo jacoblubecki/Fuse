@@ -97,7 +97,9 @@ public class FuseSearchView extends LinearLayout implements
 
     recyclerView.addOnItemTouchListener(swipeTouchListener);
 
+
     invalidate();
+
 
 
     searchView.setOnKeyListener(new OnKeyListener() {
@@ -162,8 +164,9 @@ public class FuseSearchView extends LinearLayout implements
             FuseTrack fuseTrack = new FuseTrack(t);
             fuseTracks.add(fuseTrack);
           }
-          searchSC(query);
         }
+
+        searchSC(query);
       }
 
       @Override public void failure(RetrofitError error) {

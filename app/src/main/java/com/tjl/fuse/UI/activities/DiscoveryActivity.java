@@ -1,13 +1,21 @@
 package com.tjl.fuse.ui.activities;
 
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import com.spotify.sdk.android.authentication.LoginActivity;
+import com.tjl.fuse.FuseApplication;
 import com.tjl.fuse.R;
 import com.tjl.fuse.models.Album;
 import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.player.tracks.FuseTrack;
+import com.tjl.fuse.service.Constants;
+import com.tjl.fuse.service.ForegroundService;
 import com.tjl.fuse.utils.preferences.StringPreference;
 import com.tjl.fuse.web.HypemAPI;
 import java.util.ArrayList;
@@ -22,6 +30,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import timber.log.Timber;
+
 
 /**
  * Created by Jacob on 9/19/15.
@@ -92,13 +101,9 @@ public class DiscoveryActivity extends AppCompatActivity {
               spotify.getPlaylists(userPrivate.id, new Callback<Pager<PlaylistSimple>>() {
                 @Override
                 public void success(Pager<PlaylistSimple> playlistSimplePager, Response response) {
-
                   //spotifyTracks.add();
                   Timber.e("this us the playlist name" + playlistSimplePager.items.get(0).name);
-                  Timber.e(
-                      "This is the track info? " + playlistSimplePager.items.get(0).tracks.href);
-                  Timber.e("This is the track info? " + playlistSimplePager.items.get(0).uri);
-                  spotify.getPlaylist(userPrivate.id, playlistSimplePager.items.get(0).id,
+                  spotify.getPlaylist(playlistSimplePager.items.get(0).owner.id, playlistSimplePager.items.get(0).id,
                       new Callback<Playlist>() {
                         @Override public void success(Playlist playlist, Response response) {
                           ArrayList<FuseTrack> spotifyTracks = new ArrayList<>();
@@ -131,5 +136,58 @@ public class DiscoveryActivity extends AppCompatActivity {
 
   @Override public void onNewIntent(Intent newIntent) {
     handleIntent(newIntent);
+  }
+
+  @Override public void onResume() {
+    super.onResume();
+    stopService();
+  }
+
+  @Override public void onPause() {
+    super.onPause();
+    FuseApplication.serializePlaylist();
+
+    FuseApplication app = FuseApplication.getApplication();
+    if(!(app.isServiceRunning(DiscoveryActivity.class) ||
+        app.isServiceRunning(LoginActivity.class)) &&
+        PlayerManager.getInstance().getQueue().getSize() > 0 &&
+        PlayerManager.getInstance().isPlaying()) {
+      startService();
+    }
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+
+    AudioManager manager = (AudioManager) getSystemService(AUDIO_SERVICE);
+
+    switch (keyCode) {
+      case KeyEvent.KEYCODE_VOLUME_UP:
+        manager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+            AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+        return true;
+      case KeyEvent.KEYCODE_VOLUME_DOWN:
+        manager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+            AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+        return true;
+
+      default:
+        return super.onKeyDown(keyCode, event);
+    }
+  }
+
+  public void startService() {
+    Intent startIntent = new Intent(this, ForegroundService.class);
+    startIntent.setAction(Constants.ACTION.START_FOREGROUND_ACTION);
+    startService(startIntent);
+  }
+
+  public void stopService() {
+    Intent stopIntent = new Intent(this, ForegroundService.class);
+    stopIntent.setAction(Constants.ACTION.STOP_FOREGROUND_ACTION);
+    startService(stopIntent);
+
+    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    manager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE);
   }
 }

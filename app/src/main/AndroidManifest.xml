@@ -45,6 +45,8 @@
         />
 
     <activity android:name="com.spotify.sdk.android.authentication.LoginActivity"/>
+
+    <service android:name=".service.ForegroundService"/>
   </application>
 
 </manifest>

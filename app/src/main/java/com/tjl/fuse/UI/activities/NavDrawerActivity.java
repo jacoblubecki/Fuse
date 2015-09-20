@@ -24,8 +24,8 @@ import timber.log.Timber;
  * Created by Jacob on 9/19/15.
  */
 public class NavDrawerActivity extends AppCompatActivity {
-  private LinearLayout drawerWrapper;
-  private DrawerLayout mDrawerLayout;
+  protected LinearLayout drawerWrapper;
+  protected DrawerLayout mDrawerLayout;
   private ListView mDrawerList;
   private ActionBarDrawerToggle mDrawerToggle;
 
@@ -86,7 +86,13 @@ public class NavDrawerActivity extends AppCompatActivity {
     mDrawerLayout.setDrawerListener(mDrawerToggle);
   }
 
+
+  protected boolean isDrawerOpen() {
+    return mDrawerLayout.isDrawerOpen(drawerWrapper);
+  }
+
   public void hideSoftKeyboard() {
+
     if(getCurrentFocus()!=null) {
       InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
       inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
