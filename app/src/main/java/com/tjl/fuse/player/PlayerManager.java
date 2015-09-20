@@ -109,6 +109,12 @@ public class PlayerManager
               Pattern pattern = Pattern.compile("/([^/]*)$");
               Matcher matcher = pattern.matcher(queue.current().play_uri);
 
+              if(matcher.find()) {
+                Timber.i(matcher.group(1));
+                ParseObject track = new ParseObject("Track");
+                track.put("trackId", matcher.group(1));
+                track.saveInBackground();
+              }
             }
             break;
 

@@ -59,8 +59,9 @@ public class DiscoveryActivity extends AppCompatActivity {
     FuseApplication.serializePlaylist();
 
     FuseApplication app = FuseApplication.getApplication();
-    if(!(app.isServiceRunning(DiscoveryActivity.class) ||
+    if (!(app.isServiceRunning(FuseActivity.class) ||
         app.isServiceRunning(LoginActivity.class)) &&
+        PlayerManager.getInstance().getQueue() != null &&
         PlayerManager.getInstance().getQueue().getSize() > 0 &&
         PlayerManager.getInstance().isPlaying()) {
       startService();

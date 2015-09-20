@@ -210,6 +210,7 @@ public class FuseActivity extends NavDrawerActivity {
       FuseApplication app = FuseApplication.getApplication();
       if (!(app.isServiceRunning(DiscoveryActivity.class) ||
           app.isServiceRunning(LoginActivity.class)) &&
+          PlayerManager.getInstance().getQueue() != null &&
           PlayerManager.getInstance().getQueue().getSize() > 0 &&
           PlayerManager.getInstance().isPlaying()) {
         startService();
