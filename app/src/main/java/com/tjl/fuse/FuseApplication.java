@@ -5,7 +5,6 @@ import com.parse.Parse;
 import com.squareup.leakcanary.LeakCanary;
 import com.tjl.fuse.player.PlayerManager;
 import dagger.Component;
-import java.text.ParseException;
 import javax.inject.Singleton;
 import timber.log.Timber;
 
@@ -14,6 +13,7 @@ import timber.log.Timber;
  */
 public class FuseApplication extends Application {
 
+  public static final String PREFS_NAME = "PrefFile";
   @Singleton @Component(modules = ApplicationModule.class) public interface AppComponent {
     void inject(FuseApplication application);
 
@@ -26,6 +26,7 @@ public class FuseApplication extends Application {
     super.onCreate();
 
     instance = this;
+
 
     // Leak detection
     LeakCanary.install(this);

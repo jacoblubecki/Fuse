@@ -4,15 +4,16 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import com.tjl.fuse.R;
 import com.tjl.fuse.adapter.SearchAdapter;
 import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.player.tracks.FuseTrack;
+import com.tjl.fuse.ui.activities.NavDrawerActivity;
 import com.tjl.fuse.utils.preferences.StringPreference;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,7 @@ import timber.log.Timber;
  * Created by JoshBeridon on 9/19/15.
  */
 public class FuseSearchView extends LinearLayout {
-  EditText searchText;
-  private SearchView searchView;
+  private EditText searchView;
   private Button searchButton;
   private SpotifyService spotify;
   private SoundCloudService soundCloud;
@@ -55,7 +55,7 @@ public class FuseSearchView extends LinearLayout {
     String token = new StringPreference(getContext(), tokenKey).get();
     playerManager = PlayerManager.getInstance();
 
-    searchView = (SearchView) findViewById(R.id.search_view);
+    searchView = (EditText) findViewById(R.id.search_view);
     searchButton = (Button) findViewById(R.id.fuse_search);
     fuseTracks = new ArrayList<>();
 
@@ -88,37 +88,38 @@ public class FuseSearchView extends LinearLayout {
     recyclerView.setLayoutManager(manager);
     recyclerView.setAdapter(adapter);
 
-    searchView.setIconifiedByDefault(false);
+
 
     invalidate();
 
     searchButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        search(searchView.getQuery().toString());
+        search(searchView.getText().toString());
       }
     });
-    searchView.setOnSearchClickListener(new OnClickListener() {
-      @Override public void onClick(View v) {
-        search(searchView.getQuery()
-            .toString()); //TODO made this work ( this means open the search window
-      }
-    });
-    searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-      @Override public boolean onClose() {
-        recyclerView.setAdapter(null);
-        return false;
-      }
-    });
-    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-      @Override public boolean onQueryTextSubmit(String query) {
-        return false;
-      }
 
-      @Override public boolean onQueryTextChange(String newText) {
-        if (newText.compareTo("") == 0) recyclerView.setAdapter(null);
+    searchView.setOnKeyListener(new OnKeyListener() {
+      @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+          recyclerView.setAdapter(null);
+          fuseTracks.clear();
+          search(searchView.getText().toString());
+          ((NavDrawerActivity) context).hideSoftKeyboard();
+          return true;
+        }
         return false;
       }
     });
+    //searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+    //  @Override public boolean onQueryTextSubmit(String query) {
+    //    return false;
+    //  }
+    //
+    //  @Override public boolean onQueryTextChange(String newText) {
+    //    if (newText.compareTo("") == 0) recyclerView.setAdapter(null);
+    //    return false;
+    //  }
+    //});
   }
 
   public void search(String query) {

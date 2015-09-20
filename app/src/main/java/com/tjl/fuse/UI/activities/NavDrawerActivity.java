@@ -86,7 +86,7 @@ public class NavDrawerActivity extends AppCompatActivity {
     mDrawerLayout.setDrawerListener(mDrawerToggle);
   }
 
-  protected void hideSoftKeyboard() {
+  public void hideSoftKeyboard() {
     if(getCurrentFocus()!=null) {
       InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
       inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
