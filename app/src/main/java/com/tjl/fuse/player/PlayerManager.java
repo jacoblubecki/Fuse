@@ -74,6 +74,8 @@ public class PlayerManager
   }
 
   public void play() {
+    pause();
+
     if (queue != null && queue.getSize() > 0) {
       if (checkHasAudioFocus()) {
         switch (currentTrack.type) {
@@ -111,6 +113,9 @@ public class PlayerManager
   }
 
   public void next() {
+    pause();
+    soundcloud.stopPreparing();
+
     if (queue != null && queue.getSize() > 0) {
       if (checkHasAudioFocus()) {
         currentTrack = queue.next();
@@ -137,6 +142,9 @@ public class PlayerManager
   }
 
   public void previous() {
+    pause();
+    soundcloud.stopPreparing();
+
     if (queue != null && queue.getSize() > 0) {
       if (checkHasAudioFocus()) {
         currentTrack = queue.previous();
