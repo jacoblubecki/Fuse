@@ -10,7 +10,6 @@ import com.tjl.fuse.R;
 import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.soundcloud.SoundCloudAuth;
 import com.tjl.fuse.spotify.SpotifyAuth;
-import com.tjl.fuse.ui.SwipeablePlaylistView;
 import com.tjl.fuse.utils.preferences.StringPreference;
 import timber.log.Timber;
 
@@ -35,7 +34,6 @@ public class FuseActivity extends NavDrawerActivity {
 
     SpotifyAuth.authenticate(this, SPOTIFY_REQUEST_CODE);
 
-    displayView(1);
   }
 
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {

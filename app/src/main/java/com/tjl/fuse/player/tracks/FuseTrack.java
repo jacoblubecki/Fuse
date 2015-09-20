@@ -30,6 +30,8 @@ public class FuseTrack {
     this.type = Type.SOUNDCLOUD;
   }
 
+
+
   public FuseTrack(kaaes.spotify.webapi.android.models.Track track) {
     this.title = track.name;
     Timber.i(title);
