@@ -28,6 +28,12 @@ public class SwipeablePlaylistView extends PlaylistView
     super(context, attrs);
   }
 
+  public void changeAdapter(SearchAdapter adapter) {
+    recyclerView.setAdapter(null);
+    recyclerView.setAdapter(adapter);
+    adapter.notifyDataSetChanged();
+  }
+
   @Override public void onFinishInflate() {
     super.onFinishInflate();
 
