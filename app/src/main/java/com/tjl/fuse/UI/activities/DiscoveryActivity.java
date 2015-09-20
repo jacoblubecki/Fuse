@@ -228,6 +228,8 @@ public class DiscoveryActivity extends AppCompatActivity {
 
             tracks.add(track);
           }
+
+          updateView(tracks);
         } else {
           Timber.e(e, "Couldn't get Parse data.");
         }
@@ -271,7 +273,14 @@ public class DiscoveryActivity extends AppCompatActivity {
                                 track.title = object.getString("title");
                                 track.artists = object.getString("artists");
                                 track.type = FuseTrack.Type.fromString(object.getString("type"));
+
                                 track.play_uri = object.getString("trackId");
+
+                                if(track.type == FuseTrack.Type.SOUNDCLOUD) {
+                                  track.play_uri =
+                                      "https://api.soundcloud.com/tracks/" + track.play_uri
+                                          + "/stream";
+                                }
                                 track.primary_artist = object.getString("primary_artist");
                                 track.image_url = object.getString("image_url");
 

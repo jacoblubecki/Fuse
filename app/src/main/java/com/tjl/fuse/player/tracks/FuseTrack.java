@@ -40,10 +40,12 @@ public class FuseTrack {
     this.primary_artist = hypemAlbum.artist;
     this.play_uri = hypemAlbum.HypemTracks[0].streamUrl;
 
-    Pattern pattern = Pattern.compile(".+?(stream)");
+    Pattern pattern = Pattern.compile("tracks/(.*?)/stream");
     Matcher matcher = pattern.matcher(play_uri);
 
     this.play_uri = matcher.matches() ? matcher.group(1) : play_uri;
+
+    Timber.i("Stream URI = " + play_uri);
 
     this.image_url = hypemAlbum.artworkUrl;
 
