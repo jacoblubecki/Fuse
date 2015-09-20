@@ -1,6 +1,7 @@
 package com.tjl.fuse.player.tracks;
 
 import lubecki.soundcloud.webapi.android.models.Track;
+import timber.log.Timber;
 
 /**
  * Created by Jacob on 9/19/15.
@@ -23,6 +24,7 @@ public class FuseTrack {
 
   public FuseTrack(kaaes.spotify.webapi.android.models.Track track) {
     this.title = track.name;
+    Timber.i(title);
     this.primary_artist = track.artists.get(0).name;
 
     StringBuilder artistList = new StringBuilder();
@@ -35,7 +37,15 @@ public class FuseTrack {
     this.artists = artistList.toString();
 
     this.play_uri = track.uri;
-    this.image_url = track.album.images.get(0).url;
+
+    if(track.album.images.size() > 0) {
+      this.image_url = track.album.images.get(0).url;
+    } else {
+      this.image_url =
+          "http://www.icons101.com/icons/17/Mitu_icon_pack_2_by_scope66/128/spotify.png";
+    }
+
+    Timber.i(image_url);
     this.type = Type.SPOTIFY;
   }
 

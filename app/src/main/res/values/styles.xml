@@ -27,7 +27,12 @@
     <item name="elevation">8dp</item>
     <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+  </style>
 
+  <style name="FuseCard" parent="CardView">
+    <item name="cardUseCompatPadding">true</item>
+    <item name="android:clickable">true</item>
+    <item name="android:foreground">?android:attr/selectableItemBackground</item>
   </style>
 
 </resources>

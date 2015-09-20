@@ -14,9 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/search_view"
-            >
-
-        </SearchView>
+            />
 
         <Button
             android:layout_width="match_parent"
@@ -29,6 +27,7 @@
             android:id="@+id/search_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="44dp"
             />
     </com.tjl.fuse.ui.FuseSearchView>
 </LinearLayout>

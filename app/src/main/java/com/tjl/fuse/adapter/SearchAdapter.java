@@ -1,10 +1,15 @@
 package com.tjl.fuse.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
@@ -18,6 +23,7 @@ import java.util.List;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewHolder> {
 
   private List<FuseTrack> tracks;
+  private int lastPosition = -1;
 
   public SearchAdapter(List<FuseTrack> tracks) {
     this.tracks = tracks;
@@ -32,11 +38,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewH
 
   @Override public void onBindViewHolder(TrackViewHolder holder, int position) {
     holder.text.setText(tracks.get(position).title);
-    Picasso.with(holder.card.getContext())
-        .load(tracks.get(position).image_url)
-        .into(holder.image);
+    Picasso.with(holder.card.getContext()).load(tracks.get(position).image_url).into(holder.image);
   }
 
+  @Override public long getItemId(int position) {
+    return tracks.get(position).hashCode();
+  }
 
   @Override public int getItemCount() {
     return tracks.size();
@@ -52,6 +59,27 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewH
       card = (CardView) itemView.findViewById(R.id.card);
       image = (ImageView) itemView.findViewById(R.id.track_photo);
       text = (TextView) itemView.findViewById(R.id.track_name);
+    }
+  }
+
+  public static class SearchGridLayoutManager extends GridLayoutManager {
+
+    public SearchGridLayoutManager(Context context, AttributeSet attrs, int defStyleAttr,
+        int defStyleRes) {
+      super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    public SearchGridLayoutManager(Context context, int spanCount) {
+      super(context, spanCount);
+    }
+
+    public SearchGridLayoutManager(Context context, int spanCount, int orientation,
+        boolean reverseLayout) {
+      super(context, spanCount, orientation, reverseLayout);
+    }
+
+    @Override public boolean supportsPredictiveItemAnimations() {
+      return true;
     }
   }
 }
