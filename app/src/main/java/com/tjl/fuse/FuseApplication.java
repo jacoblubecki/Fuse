@@ -13,10 +13,8 @@ import com.tjl.fuse.player.tracks.FuseTrack;
 import com.tjl.fuse.player.tracks.Queue;
 import com.tjl.fuse.utils.preferences.StringPreference;
 import dagger.Component;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import javax.inject.Singleton;
 import timber.log.Timber;
 
@@ -25,6 +23,7 @@ import timber.log.Timber;
  */
 public class FuseApplication extends Application {
 
+  public static final String PREFS_NAME = "PrefFile";
   @Singleton @Component(modules = ApplicationModule.class) public interface AppComponent {
     void inject(FuseApplication application);
 
@@ -39,6 +38,7 @@ public class FuseApplication extends Application {
 
     instance = this;
     queue = getPlaylist();
+
 
     // Leak detection
     LeakCanary.install(this);
