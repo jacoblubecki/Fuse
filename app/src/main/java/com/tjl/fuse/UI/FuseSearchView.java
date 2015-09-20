@@ -56,7 +56,6 @@ public class FuseSearchView extends LinearLayout {
     playerManager = PlayerManager.getInstance();
 
     searchView = (EditText) findViewById(R.id.search_view);
-    searchButton = (Button) findViewById(R.id.fuse_search);
     fuseTracks = new ArrayList<>();
 
     //spotify
