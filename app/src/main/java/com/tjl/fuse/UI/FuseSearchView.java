@@ -90,6 +90,7 @@ public class FuseSearchView extends LinearLayout {
 
 
 
+
     invalidate();
 
     searchButton.setOnClickListener(new View.OnClickListener() {
