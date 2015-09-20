@@ -41,7 +41,7 @@ public class FuseApplication extends Application {
 
 
     // Leak detection
-    LeakCanary.install(this);
+    //LeakCanary.install(this);
 
     // Data
     String parseAppId = getString(R.string.parse_app_id);

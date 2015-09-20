@@ -46,8 +46,8 @@ public class FuseActivity extends NavDrawerActivity {
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == SPOTIFY_REQUEST_CODE && resultCode == RESULT_OK) {
       SpotifyAuth.handleResponse(this, resultCode, data);
+      displayView(1);
       if (!(new StringPreference(this, getString(R.string.soundcloud_token_key)).isSet())) {
-        displayView(1);
         SoundCloudAuth.startSoundCloudAuthActivity(this);
       }
     }

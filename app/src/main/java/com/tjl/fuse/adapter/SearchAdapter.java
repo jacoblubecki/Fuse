@@ -38,13 +38,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewH
   }
 
   @Override public void onBindViewHolder(TrackViewHolder holder, final int position) {
-    if (tracks.get(position).type == (FuseTrack.Type.SPOTIFY)) {
-      holder.card.setCardBackgroundColor(Color.parseColor("#94E8B1"));
-    } else if (tracks.get(position).type == (FuseTrack.Type.SOUNDCLOUD)) {
-      holder.card.setCardBackgroundColor(Color.parseColor("#FFC28D"));
-    } else {
-      holder.card.setCardBackgroundColor(Color.CYAN);
-    }
+    holder.card.setCardBackgroundColor(Color.parseColor("#DDDDDD"));
 
     final Queue queue = new Queue(tracks);
 

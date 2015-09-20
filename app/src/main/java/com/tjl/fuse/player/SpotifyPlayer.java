@@ -50,6 +50,7 @@ public class SpotifyPlayer extends FusePlayer
 
   public void reset() {
     changeState(STOPPED);
+    player.pause();
     player.clearQueue();
   }
 

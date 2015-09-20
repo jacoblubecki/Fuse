@@ -87,34 +87,56 @@ public class PlayerManager
 
     if (queue != null && queue.getSize() > 0) {
       if (checkHasAudioFocus()) {
-        switch (queue.current().type) {
-          case SPOTIFY:
-            if (spotify.state == State.PAUSED) {
-              spotify.play();
-            } else {
-              spotify.start(queue.current().play_uri);
+        if (queue.current() != null) {
+          switch (queue.current().type) {
+            case SPOTIFY:
+              if (spotify.state == State.PAUSED) {
+                spotify.play();
+              } else {
+                spotify.start(queue.current().play_uri);
 
-              ParseObject track = new ParseObject("Track");
-              track.put("trackId", queue.current().play_uri);
-              track.saveInBackground();
-            }
-            break;
+                ParseObject track = new ParseObject("Track");
+                track.put("title", queue.current().title);
+                track.put("artists", queue.current().artists);
+                track.put("trackId", queue.current().play_uri);
+                track.put("primary_artist", queue.current().primary_artist);
+                track.put("type", queue.current().type.toString());
+                track.put("image_url", queue.current().image_url);
+                track.saveInBackground();
+              }
+              break;
 
-          case SOUNDCLOUD:
-            if (soundcloud.state == State.PAUSED) {
-              soundcloud.play();
-            } else {
-              soundcloud.start(queue.current().play_uri);
+            case SOUNDCLOUD:
+              if (soundcloud.state == State.PAUSED) {
+                soundcloud.play();
+              } else {
+                soundcloud.start(queue.current().play_uri);
 
-              Pattern pattern = Pattern.compile("/([^/]*)$");
-              Matcher matcher = pattern.matcher(queue.current().play_uri);
+                String[] uriParts = queue.current().play_uri.split("/");
+                if (uriParts.length > 3) {
+                  String uri = uriParts[4];
 
-            }
-            break;
+                  Timber.i(uri);
+                  ParseObject track = new ParseObject("Track");
+                  track.put("title", queue.current().title);
+                  track.put("artists", queue.current().artists == null ? "" : queue.current().artists);
+                  track.put("trackId", uri);
+                  track.put("primary_artist", queue.current().primary_artist);
+                  track.put("type", queue.current().type.toString());
+                  track.put("image_url", queue.current().image_url);
+                  track.saveInBackground();
+                } else {
+                  Timber.i("No match.");
+                }
+              }
+              break;
 
-          default:
-            Timber.e("Unrecognized track type: " + queue.current().type);
-            break;
+            default:
+              Timber.e("Unrecognized track type: " + queue.current().type);
+              break;
+          }
+        } else {
+          Timber.e("Current track was null.");
         }
 
         FuseApplication app = FuseApplication.getApplication();
@@ -133,10 +155,8 @@ public class PlayerManager
   }
 
   public void pause() {
-    if (isPlaying()) {
       spotify.pause();
       soundcloud.pause();
-    }
   }
 
   public void next() {
