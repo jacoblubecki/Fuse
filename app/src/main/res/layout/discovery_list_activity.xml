@@ -58,6 +58,7 @@
             android:gravity="center"
             android:text="previous"
             android:textSize="24sp"
+            style="@android:style/ButtonBar"
             />
 
         <ImageButton
@@ -68,6 +69,7 @@
             android:gravity="center"
             android:text="play"
             android:textSize="24sp"
+            style="@android:style/ButtonBar"
             />
 
         <ImageButton
@@ -78,6 +80,7 @@
             android:gravity="center"
             android:text="next"
             android:textSize="24sp"
+            style="@android:style/ButtonBar"
             />
       </com.tjl.fuse.ui.VcrView>
     </android.support.design.widget.CoordinatorLayout>

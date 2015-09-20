@@ -142,7 +142,7 @@ public class FuseSearchView extends LinearLayout implements
               FuseTrack fuseTrack = new FuseTrack(t);
               fuseTracks.add(fuseTrack);
             }
-
+            
             adapter = new SearchAdapter(fuseTracks);
             recyclerView.setAdapter(adapter);
 
