@@ -46,7 +46,6 @@ public class DiscoveryActivity extends AppCompatActivity {
   LinearLayoutManager manager;
   PlaylistAdapter adapter;
 
-
   public static String EXTRA_PLAYLIST_VALUE = "EXTRA_PLAYLIST_VALUE";
 
   @Override public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +73,6 @@ public class DiscoveryActivity extends AppCompatActivity {
 
     handleIntent(getIntent());
 
-
     if (playerManager.getQueue() != null && playerManager.getQueue().getSize() > 0) {
       manager = new LinearLayoutManager(getApplicationContext());
       adapter = new PlaylistAdapter(fuseTracks);
@@ -101,6 +99,11 @@ public class DiscoveryActivity extends AppCompatActivity {
               for (Album album : albums) {
                 fuseTracks.add(new FuseTrack(album));
               }
+              manager = new LinearLayoutManager(getApplicationContext());
+              adapter = new PlaylistAdapter(fuseTracks);
+              recyclerView = (RecyclerView) findViewById(R.id.playlist_view);
+              recyclerView.setLayoutManager(manager);
+              recyclerView.setAdapter(adapter);
             }
 
             @Override public void failure(RetrofitError error) {
@@ -123,9 +126,9 @@ public class DiscoveryActivity extends AppCompatActivity {
                   spotify.getPlaylist(playlistSimplePager.items.get(0).owner.id,
                       playlistSimplePager.items.get(0).id, new Callback<Playlist>() {
                         @Override public void success(Playlist playlist, Response response) {
-                          ArrayList<FuseTrack> spotifyTracks = new ArrayList<>();
+                          fuseTracks = new ArrayList<>();
                           for (PlaylistTrack playlistTrack : playlist.tracks.items) {
-                            spotifyTracks.add(new FuseTrack(playlistTrack.track));
+                            fuseTracks.add(new FuseTrack(playlistTrack.track));
                           }
                           manager = new LinearLayoutManager(getApplicationContext());
                           adapter = new PlaylistAdapter(fuseTracks);
@@ -133,7 +136,6 @@ public class DiscoveryActivity extends AppCompatActivity {
                           recyclerView = (RecyclerView) findViewById(R.id.playlist_view);
                           recyclerView.setLayoutManager(manager);
                           recyclerView.setAdapter(adapter);
-                          adapter.notifyDataSetChanged();
                         }
 
                         @Override public void failure(RetrofitError error) {
@@ -172,9 +174,9 @@ public class DiscoveryActivity extends AppCompatActivity {
     FuseApplication.serializePlaylist();
 
     FuseApplication app = FuseApplication.getApplication();
-    if (!(app.isServiceRunning(DiscoveryActivity.class) ||
-        app.isServiceRunning(LoginActivity.class)) &&
-        PlayerManager.getInstance().getQueue() != null && 
+    if (!(app.isServiceRunning(DiscoveryActivity.class) || app.isServiceRunning(
+        LoginActivity.class)) &&
+        PlayerManager.getInstance().getQueue() != null &&
         PlayerManager.getInstance().getQueue().getSize() > 0 &&
         PlayerManager.getInstance().isPlaying()) {
       startService();
