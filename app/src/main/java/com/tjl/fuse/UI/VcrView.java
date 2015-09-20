@@ -3,9 +3,6 @@ package com.tjl.fuse.ui;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -63,8 +60,10 @@ public class VcrView extends LinearLayout {
       @Override public void onClick(View v) {
         if (PlayerManager.getInstance().isPlaying()) {
           PlayerManager.getInstance().pause();
+          playPause.setText("play");
         } else {
           PlayerManager.getInstance().play();
+          playPause.setText("pause");
         }
       }
     });
