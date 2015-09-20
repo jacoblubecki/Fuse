@@ -44,7 +44,6 @@
         <com.tjl.fuse.ui.VcrView
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:background="#ff2500"
             android:layout_gravity="bottom"
             android:weightSum="3"
             app:layout_behavior="com.tjl.fuse.ui.VcrBehavior"
@@ -61,6 +60,7 @@
               android:textSize="24sp"
               android:contentDescription="previous"
               style="@android:style/ButtonBar"
+              android:background="#f7f7f7"
               />
 
           <ImageButton
@@ -73,6 +73,7 @@
               android:textSize="24sp"
               android:contentDescription="play/pause"
               style="@android:style/ButtonBar"
+              android:background="#f7f7f7"
 
               />
 
@@ -86,6 +87,7 @@
               android:textSize="24sp"
               android:contentDescription="next"
               style="@android:style/ButtonBar"
+              android:background="#f7f7f7"
               />
         </com.tjl.fuse.ui.VcrView>
 

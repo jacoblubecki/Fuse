@@ -13,6 +13,7 @@
       android:src="@drawable/ic_launcher"
       android:contentDescription="previous"
       style="@android:style/ButtonBar"
+      android:background="#f7f7f7"
       />
 
   <ImageButton android:id="@+id/play_pause_button"
@@ -22,6 +23,7 @@
       android:src="@drawable/ic_launcher"
       android:contentDescription="play/pause"
       style="@android:style/ButtonBar"
+      android:background="#f7f7f7"
       />
 
   <ImageButton android:id="@+id/next_button"
@@ -31,6 +33,7 @@
       android:src="@drawable/ic_launcher"
       android:contentDescription="next"
       style="@android:style/ButtonBar"
+      android:background="#f7f7f7"
       />
 
 </com.tjl.fuse.ui.VcrView>
