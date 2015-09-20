@@ -45,7 +45,6 @@ public class FuseTrack {
           "http://www.icons101.com/icons/17/Mitu_icon_pack_2_by_scope66/128/spotify.png";
     }
 
-    Timber.i(image_url);
     this.type = Type.SPOTIFY;
   }
 

@@ -5,12 +5,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
-import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.tjl.fuse.R;
-import com.tjl.fuse.adapter.SearchAdapter;
+import com.tjl.fuse.adapter.PlaylistAdapter;
 import com.tjl.fuse.player.PlayerManager;
-import com.tjl.fuse.player.tracks.FuseTrack;
-import java.util.ArrayList;
 
 /**
  * Created by JoshBeridon on 9/19/15.
@@ -26,16 +23,16 @@ public class PlaylistView extends LinearLayout {
   @Override public void onFinishInflate() {
     super.onFinishInflate();
 
-
     playerManager = PlayerManager.getInstance();
 
-    if(playerManager.getQueue() != null && playerManager.getQueue().getSize() > 0) {
+    if (playerManager.getQueue() != null && playerManager.getQueue().getSize() > 0) {
       LinearLayoutManager manager = new LinearLayoutManager(getContext());
-      final SearchAdapter adapter = new SearchAdapter(playerManager.getQueue().getTracks());
+      PlaylistAdapter adapter = new PlaylistAdapter(playerManager.getQueue().getTracks());
 
       recyclerView = (RecyclerView) findViewById(R.id.playlist_view);
       recyclerView.setLayoutManager(manager);
       recyclerView.setAdapter(adapter);
+      invalidate();
     }
   }
 }
