@@ -1,5 +1,6 @@
 package com.tjl.fuse.player.tracks;
 
+import com.tjl.fuse.models.Album;
 import lubecki.soundcloud.webapi.android.models.Track;
 import timber.log.Timber;
 
@@ -19,6 +20,13 @@ public class FuseTrack {
     this.primary_artist = track.user.username;
     this.play_uri = track.uri;
     this.image_url = track.artwork_url;
+    this.type = Type.SOUNDCLOUD;
+  }
+  public FuseTrack(Album hypemAlbum) {
+    this.title = hypemAlbum.HypemTracks[0].title;
+    this.primary_artist = hypemAlbum.artist;
+    this.play_uri = hypemAlbum.HypemTracks[0].streamUrl;
+    this.image_url = hypemAlbum.artworkUrl;
     this.type = Type.SOUNDCLOUD;
   }
 

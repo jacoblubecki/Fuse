@@ -6,17 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import com.tjl.fuse.R;
 import com.tjl.fuse.models.Album;
+import com.tjl.fuse.player.tracks.FuseTrack;
 import com.tjl.fuse.web.HypemAPI;
+import java.util.ArrayList;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import timber.log.Timber;
 
 /**
  * Created by Jacob on 9/19/15.
  */
 public class DiscoveryActivity extends AppCompatActivity {
   HypemAPI hypemAPI;
+  ArrayList<FuseTrack> fuseTracks;
+
 
   public static String EXTRA_PLAYLIST_VALUE = "EXTRA_PLAYLIST_VALUE";
 
@@ -30,6 +33,7 @@ public class DiscoveryActivity extends AppCompatActivity {
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     hypemAPI = HypemAPI.getInstance(getApplicationContext());
+    fuseTracks = new ArrayList<>();
     handleIntent(getIntent());
   }
 
@@ -45,7 +49,10 @@ public class DiscoveryActivity extends AppCompatActivity {
 
           hypemAPI.featuredService.getMyFeed(new Callback<Album[]>() {
             @Override public void success(Album[] albums, Response response) {
-              Timber.e("one of the hyped albums is " + albums[0].HypemTracks[0].title);
+
+              for(Album album : albums){
+                fuseTracks.add(new FuseTrack(album));
+              }
             }
 
             @Override public void failure(RetrofitError error) {
