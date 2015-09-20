@@ -9,8 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.tjl.fuse.R;
+import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.player.tracks.FuseTrack;
+import com.tjl.fuse.player.tracks.Queue;
 import java.util.List;
+import timber.log.Timber;
 
 /**
  * Created by JoshBeridon on 9/19/15.
@@ -30,8 +33,22 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.TrackV
     return new TrackViewHolder(view);
   }
 
-  @Override public void onBindViewHolder(TrackViewHolder holder, int position) {
+  @Override public void onBindViewHolder(TrackViewHolder holder, final int position) {
     holder.text.setText(tracks.get(position).title);
+
+    final Queue queue = new Queue(tracks);
+    holder.card.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        queue.setCurrent(position);
+        PlayerManager.getInstance().setQueue(queue);
+        PlayerManager.getInstance().reset();
+
+        Timber.i("Track title:  " + PlayerManager.getInstance().getQueue().current().title);
+        PlayerManager.getInstance().play();
+
+        Timber.i("Track at index " + (position));
+      }
+    });
     Picasso.with(holder.card.getContext())
         .load(tracks.get(position).image_url)
         .into(holder.image);

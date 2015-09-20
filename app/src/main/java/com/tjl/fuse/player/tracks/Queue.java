@@ -7,12 +7,14 @@ import timber.log.Timber;
 /**
  * Created by Jacob on 9/18/15.
  */
-public class Queue implements Iterable<FuseTrack>{
+public class Queue implements Iterable<FuseTrack> {
 
   private List<FuseTrack> tracks;
   private int index = 0;
   private boolean looping = false;
   private boolean shuffling = false;
+
+  private boolean reachedEnd = false;
 
   public Queue(List<FuseTrack> tracks) {
     this.tracks = tracks;
@@ -31,7 +33,11 @@ public class Queue implements Iterable<FuseTrack>{
   }
 
   public FuseTrack current() {
-    return tracks.get(index);
+    if(tracks.size() > index) {
+      return tracks.get(index);
+    } else {
+      return null;
+    }
   }
 
   public List<FuseTrack> getTracks() {
@@ -44,6 +50,9 @@ public class Queue implements Iterable<FuseTrack>{
 
   public FuseTrack previous() {
     previousTrack();
+
+    reachedEnd = false;
+
     return tracks.get(index);
   }
 
@@ -52,8 +61,20 @@ public class Queue implements Iterable<FuseTrack>{
     return tracks.get(index);
   }
 
+  public FuseTrack getPrevious() {
+    int tempIndex = index - 1;
+    tempIndex = tempIndex < 0 ? 0 : tempIndex;
+    return tracks.get(tempIndex);
+  }
+
+  public FuseTrack getNext() {
+    int tempIndex = index + 1;
+    tempIndex = tempIndex > getSize() - 1 ? (looping ? 0 : getSize() - 1) : tempIndex;
+    return tracks.get(tempIndex);
+  }
+
   private void previousTrack() {
-    if(shuffling) {
+    if (shuffling) {
       index = (int) (Math.random() * tracks.size());
     } else {
       index--;
@@ -82,22 +103,32 @@ public class Queue implements Iterable<FuseTrack>{
         index = 0;
       } else {
         index = tracks.size() - 1;
+        reachedEnd = true;
       }
     }
 
     Timber.i("Moved to queue index: " + index);
   }
 
+  public boolean endReached() {
+    return reachedEnd;
+  }
+
   @Override public Iterator<FuseTrack> iterator() {
     return tracks.iterator();
   }
 
-  public void notifyDataSetChanged() {
-    previousTrack();
-    nextTrack();
+  public void setCurrent(int current) {
+    if (index >= 0 && index < tracks.size()) {
+      Timber.i("Setting current index of the queue to " + current);
+
+      this.index = current;
+
+      reachedEnd = false;
+    }
   }
 
-  public void setCurrent(int current) {
-    this.index = current;
+  public int getCurrent() {
+    return index;
   }
 }

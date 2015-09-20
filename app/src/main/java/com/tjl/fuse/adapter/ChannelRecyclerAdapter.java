@@ -18,7 +18,8 @@ import java.util.List;
 /**
  * Created by Jacob on 9/19/15.
  */
-public class ChannelRecyclerAdapter extends RecyclerView.Adapter<ChannelRecyclerAdapter.ChannelViewHolder> {
+public class ChannelRecyclerAdapter
+    extends RecyclerView.Adapter<ChannelRecyclerAdapter.ChannelViewHolder> {
 
   private List<ChannelItem> channels;
 
@@ -37,14 +38,14 @@ public class ChannelRecyclerAdapter extends RecyclerView.Adapter<ChannelRecycler
     holder.text.setText(channels.get(position).title);
     holder.card.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        PlayerManager.getInstance().pause();
-
         Intent intent = new Intent(holder.card.getContext(), DiscoveryActivity.class);
         intent.putExtra(DiscoveryActivity.EXTRA_PLAYLIST_VALUE, channels.get(position).title);
         holder.card.getContext().startActivity(intent);
       }
     });
-    Picasso.with(holder.card.getContext()).load(channels.get(position).image_url).into(holder.image);
+    Picasso.with(holder.card.getContext())
+        .load(channels.get(position).image_url)
+        .into(holder.image);
   }
 
   @Override public int getItemCount() {

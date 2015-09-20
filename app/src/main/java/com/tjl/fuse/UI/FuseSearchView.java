@@ -98,8 +98,6 @@ public class FuseSearchView extends LinearLayout implements
 
     searchView.setIconifiedByDefault(false);
 
-    invalidate();
-
     searchButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         search(searchView.getQuery().toString());
@@ -107,6 +105,7 @@ public class FuseSearchView extends LinearLayout implements
     });
     searchView.setOnSearchClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
+        fuseTracks.clear();
         search(searchView.getQuery()
             .toString()); //TODO made this work ( this means open the search window
       }
@@ -168,8 +167,9 @@ public class FuseSearchView extends LinearLayout implements
             FuseTrack fuseTrack = new FuseTrack(t);
             fuseTracks.add(fuseTrack);
           }
-          searchSC(query);
         }
+
+        searchSC(query);
       }
 
       @Override public void failure(RetrofitError error) {

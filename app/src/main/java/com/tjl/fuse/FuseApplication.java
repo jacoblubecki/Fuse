@@ -1,6 +1,8 @@
 package com.tjl.fuse;
 
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -47,7 +49,7 @@ public class FuseApplication extends Application {
     Parse.initialize(this, parseAppId, parseClientKey);
 
     // Logging
-    if(BuildConfig.DEBUG) {
+    if (BuildConfig.DEBUG) {
       Timber.plant(new Timber.DebugTree());
     }
   }
@@ -57,9 +59,9 @@ public class FuseApplication extends Application {
   }
 
   public static void serializePlaylist() {
-    Gson gson = new GsonBuilder()
-        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        .create();
+    Gson gson =
+        new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create();
 
     String json = gson.toJson(queue.getTracks().toArray());
 
@@ -69,23 +71,34 @@ public class FuseApplication extends Application {
   }
 
   public static Queue getPlaylist() {
-    if(queue == null) {
-      Gson gson = new GsonBuilder()
-          .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-          .create();
+    if (queue == null) {
+      Gson gson =
+          new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+              .create();
 
       String json = new StringPreference(instance, "MAIN_QUEUE").get();
 
       Timber.i(json + " ");
 
       ArrayList<FuseTrack> trackList;
-      if(json == null || json.isEmpty()){
+      if (json == null || json.isEmpty()) {
         trackList = new ArrayList<>();
-      }else{
+      } else {
         trackList = new ArrayList<>(Arrays.asList(gson.fromJson(json, FuseTrack[].class)));
       }
       queue = new Queue(trackList);
     }
     return queue;
+  }
+
+  public boolean isServiceRunning(Class<?> serviceClass) {
+    ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+    for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(
+        Integer.MAX_VALUE)) {
+      if (serviceClass.getName().equals(service.service.getClassName())) {
+        return true;
+      }
+    }
+    return false;
   }
 }

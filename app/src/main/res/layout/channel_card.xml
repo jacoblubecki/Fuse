@@ -39,7 +39,7 @@
           android:id="@+id/channel_name"
           android:layout_toRightOf="@+id/channel_photo"
           android:layout_centerInParent="true"
-          android:textSize="30sp"
+          android:textSize="18sp"
           android:text="Testing"
           />
 

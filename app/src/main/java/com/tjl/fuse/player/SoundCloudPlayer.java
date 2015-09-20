@@ -40,6 +40,11 @@ public class SoundCloudPlayer extends FusePlayer implements MediaPlayer.OnPrepar
     }
   }
 
+  public void reset() {
+    changeState(STOPPED);
+    player.reset();
+  }
+
   public void stopPreparing() {
     changeState(STOPPED);
     player.reset();

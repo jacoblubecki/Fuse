@@ -19,6 +19,7 @@ import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.player.tracks.FuseTrack;
 import com.tjl.fuse.player.tracks.Queue;
 import java.util.List;
+import timber.log.Timber;
 
 /**
  * Created by JoshBeridon on 9/19/15.
@@ -40,11 +41,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewH
 
   @Override public void onBindViewHolder(TrackViewHolder holder, final int position) {
     if (tracks.get(position).type == (FuseTrack.Type.SPOTIFY)) {
-      holder.card.setBackgroundColor(Color.parseColor("#32CD64"));
+      holder.card.setCardBackgroundColor(Color.parseColor("#94E8B1"));
     } else if (tracks.get(position).type == (FuseTrack.Type.SOUNDCLOUD)) {
-      holder.card.setBackgroundColor(Color.parseColor("#F97242"));
+      holder.card.setCardBackgroundColor(Color.parseColor("#FFC28D"));
     } else {
-      holder.card.setBackgroundColor(Color.CYAN);
+      holder.card.setCardBackgroundColor(Color.CYAN);
     }
 
     final Queue queue = new Queue(tracks);
@@ -52,11 +53,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewH
     holder.text.setText(tracks.get(position).title);
     holder.card.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        if (PlayerManager.getInstance().getQueue() != queue) {
-          PlayerManager.getInstance().setQueue(queue);
-          PlayerManager.getInstance().getQueue().setCurrent(position);
-          PlayerManager.getInstance().play();
-        }
+        queue.setCurrent(position);
+        PlayerManager.getInstance().setQueue(queue);
+        PlayerManager.getInstance().reset();
+
+        Timber.i("Track title:  " + PlayerManager.getInstance().getQueue().current().title);
+        PlayerManager.getInstance().play();
+
+        Timber.i("Track at index " + (position));
       }
     });
     Picasso.with(holder.card.getContext()).load(tracks.get(position).image_url).into(holder.image);

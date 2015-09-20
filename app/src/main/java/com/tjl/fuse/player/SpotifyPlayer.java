@@ -48,6 +48,11 @@ public class SpotifyPlayer extends FusePlayer
     Timber.i("Playing track with uri %s.", uri);
   }
 
+  public void reset() {
+    changeState(STOPPED);
+    player.clearQueue();
+  }
+
   @Override public void play() {
     switch (state) {
       case PLAYING:
@@ -95,8 +100,6 @@ public class SpotifyPlayer extends FusePlayer
         listener.onCompletion(null);
         break;
 
-      case PAUSE:
-
       case LOST_PERMISSION:
         pause();
         changeState(State.PAUSED);
@@ -110,7 +113,7 @@ public class SpotifyPlayer extends FusePlayer
         break;
     }
 
-    Timber.i("DEFAULT: %s  %s  %s  %s", eventType.name(), playerState.playing, playerState.positionInMs, playerState.durationInMs);
+    //Timber.i("DEFAULT: %s  %s  %s  %s", eventType.name(), playerState.playing, playerState.positionInMs, playerState.durationInMs);
   }
 
   @Override public void onPlaybackError(ErrorType errorType, String s) {

@@ -13,6 +13,7 @@ import com.tjl.fuse.R;
 import com.tjl.fuse.adapter.SearchAdapter;
 import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.player.tracks.FuseTrack;
+import timber.log.Timber;
 
 /**
  * Created by Jacob on 9/19/15.
@@ -33,7 +34,8 @@ public class SwipeablePlaylistView extends PlaylistView
     playerManager = PlayerManager.getInstance();
 
     if (playerManager.getQueue() != null && playerManager.getQueue().getSize() > 0) {
-      SearchAdapter.SearchGridLayoutManager manager = new SearchAdapter.SearchGridLayoutManager(getContext(), 1);
+      SearchAdapter.SearchGridLayoutManager manager =
+          new SearchAdapter.SearchGridLayoutManager(getContext(), 1);
       adapter = new SearchAdapter(playerManager.getQueue().getTracks());
       adapter.setHasStableIds(true);
 
@@ -41,8 +43,7 @@ public class SwipeablePlaylistView extends PlaylistView
       recyclerView.setLayoutManager(manager);
       recyclerView.setAdapter(adapter);
 
-      swipeTouchListener =
-          new SwipeableRecyclerViewTouchListener(recyclerView, this);
+      swipeTouchListener = new SwipeableRecyclerViewTouchListener(recyclerView, this);
 
       recyclerView.addOnItemTouchListener(swipeTouchListener);
     }
@@ -52,17 +53,18 @@ public class SwipeablePlaylistView extends PlaylistView
     String message = "";
 
     if (direction == Direction.LEFT) {
-      message += "Track removed from the current playlist.";
+      message += "Track removed from the playlist.";
     } else if (direction == Direction.RIGHT) {
-      message += "Track added to the end of your playlist.";
+      message += "Track added to the playlist.";
     }
 
     Snackbar.make(((Activity) getContext()).findViewById(R.id.coordinator), message,
         Snackbar.LENGTH_LONG).setAction("Undo", new OnClickListener() {
       @Override public void onClick(View view) {
         playerManager.getQueue().getTracks().add(position, track);
-        playerManager.notifyDataSetChanged();
         adapter.notifyDataSetChanged();
+
+        Timber.i("Undid remove track");
       }
     }).setActionTextColor(Color.RED).show();
   }
@@ -74,11 +76,12 @@ public class SwipeablePlaylistView extends PlaylistView
   @Override
   public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
     for (int position : reverseSortedPositions) {
-        notifyUndo(position, playerManager.getQueue().getTracks().get(position), Direction.LEFT);
+      notifyUndo(position, playerManager.getQueue().getTracks().get(position), Direction.LEFT);
 
       playerManager.getQueue().getTracks().remove(position);
-      playerManager.notifyDataSetChanged();
       adapter.notifyItemRemoved(position);
+
+      Timber.i("Removed track from current playlist.");
     }
     adapter.notifyDataSetChanged();
   }
@@ -91,8 +94,9 @@ public class SwipeablePlaylistView extends PlaylistView
 
       FuseApplication.getPlaylist().getTracks().add(track);
       playerManager.getQueue().getTracks().remove(position);
-      playerManager.notifyDataSetChanged();
       adapter.notifyItemRemoved(position);
+
+      Timber.i("Added track to main playlist.");
     }
     adapter.notifyDataSetChanged();
   }
