@@ -1,5 +1,6 @@
 package com.tjl.fuse.adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,6 +32,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewH
   }
 
   @Override public void onBindViewHolder(TrackViewHolder holder, int position) {
+    if(tracks.get(position).type==(FuseTrack.Type.SPOTIFY)){
+      holder.card.setBackgroundColor(Color.GREEN);
+    } else if (tracks.get(position).type==(FuseTrack.Type.SOUNDCLOUD)){
+      holder.card.setBackgroundColor(Color.YELLOW);
+    } else{
+      holder.card.setBackgroundColor(Color.CYAN);
+    }
+
+
     holder.text.setText(tracks.get(position).title);
     Picasso.with(holder.card.getContext())
         .load(tracks.get(position).image_url)

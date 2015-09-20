@@ -13,8 +13,8 @@ import com.tjl.fuse.player.PlayerManager;
  * Created by JoshBeridon on 9/19/15.
  */
 public class PlaylistView extends LinearLayout {
-  private RecyclerView recyclerView;
-  private PlayerManager playerManager;
+  protected RecyclerView recyclerView;
+  protected PlayerManager playerManager;
 
   public PlaylistView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -23,15 +23,13 @@ public class PlaylistView extends LinearLayout {
   @Override public void onFinishInflate() {
     super.onFinishInflate();
 
-
     playerManager = PlayerManager.getInstance();
 
-
-    if(playerManager.getQueue() != null && playerManager.getQueue().getSize() > 0) {
+    if (playerManager.getQueue() != null && playerManager.getQueue().getSize() > 0) {
       LinearLayoutManager manager = new LinearLayoutManager(getContext());
       PlaylistAdapter adapter = new PlaylistAdapter(playerManager.getQueue().getTracks());
 
-      recyclerView = (RecyclerView) findViewById(R.id.search_list_view);
+      recyclerView = (RecyclerView) findViewById(R.id.playlist_view);
       recyclerView.setLayoutManager(manager);
       recyclerView.setAdapter(adapter);
       invalidate();

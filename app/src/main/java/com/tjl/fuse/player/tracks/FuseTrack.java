@@ -35,7 +35,7 @@ public class FuseTrack {
     this.artists = artistList.toString();
 
     this.play_uri = track.uri;
-    this.image_url = track.album.images.get(0).url;
+    this.image_url = track.album.images.get(0).url;//TODO search for hello
     this.type = Type.SPOTIFY;
   }
 

@@ -15,10 +15,13 @@ import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.player.tracks.FuseTrack;
 import com.tjl.fuse.utils.preferences.StringPreference;
 import java.util.ArrayList;
+import java.util.List;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.TracksPager;
+import lubecki.soundcloud.webapi.android.SoundCloudAPI;
+import lubecki.soundcloud.webapi.android.SoundCloudService;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -32,11 +35,13 @@ public class FuseSearchView extends LinearLayout {
   private SearchView searchView;
   private Button searchButton;
   private SpotifyService spotify;
+  private SoundCloudService soundCloud;
   private String songUri;
   private PlayerManager playerManager;
   private RecyclerView recyclerView;
   SearchAdapter adapter;
   Context context;
+  ArrayList<FuseTrack> fuseTracks;
 
   public FuseSearchView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -52,10 +57,23 @@ public class FuseSearchView extends LinearLayout {
 
     searchView = (SearchView) findViewById(R.id.search_view);
     searchButton = (Button) findViewById(R.id.fuse_search);
+    fuseTracks = new ArrayList<>();
+
+    //spotify
     SpotifyApi api = new SpotifyApi();
     api.setAccessToken(token);
 
     spotify = api.getService();
+
+    String clientIdSC = getContext().getString(R.string.soundcloud_client_id);
+    String tokenKeySC = getContext().getString(R.string.soundcloud_token_key);
+    String tokenSC = new StringPreference(getContext(), tokenKeySC).get();
+
+    // Sound Cloud
+    SoundCloudAPI apiSC = new SoundCloudAPI(clientIdSC);
+    apiSC.setToken(tokenSC);
+
+    soundCloud = apiSC.getService();
 
     playerManager = PlayerManager.getInstance();
     LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -71,7 +89,7 @@ public class FuseSearchView extends LinearLayout {
     recyclerView.setAdapter(adapter);
 
     searchView.setIconifiedByDefault(false);
-    
+
     invalidate();
 
     searchButton.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +99,8 @@ public class FuseSearchView extends LinearLayout {
     });
     searchView.setOnSearchClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
-        search(searchView.getQuery().toString()); //TODO made this work ( this means open the search window
+        search(searchView.getQuery()
+            .toString()); //TODO made this work ( this means open the search window
       }
     });
     searchView.setOnCloseListener(new SearchView.OnCloseListener() {
@@ -96,31 +115,52 @@ public class FuseSearchView extends LinearLayout {
       }
 
       @Override public boolean onQueryTextChange(String newText) {
-        if(newText.compareTo("")==0)
-          recyclerView.setAdapter(null);
+        if (newText.compareTo("") == 0) recyclerView.setAdapter(null);
         return false;
       }
     });
   }
 
   public void search(String query) {
+    searchSpotify(query);
 
+  }
+
+  public void searchSC(String query) {
+
+    soundCloud.searchTracks(query,
+        new Callback<List<lubecki.soundcloud.webapi.android.models.Track>>() {
+          @Override public void success(List<lubecki.soundcloud.webapi.android.models.Track> tracks,
+              Response response) {
+            Timber.e("response is " + response.getReason() + " " + tracks.get(0).title);
+            for (lubecki.soundcloud.webapi.android.models.Track t : tracks) {
+              FuseTrack fuseTrack = new FuseTrack(t);
+              fuseTracks.add(fuseTrack);
+            }
+
+            adapter = new SearchAdapter(fuseTracks);
+            recyclerView.setAdapter(adapter);
+
+            adapter.notifyDataSetChanged();
+          }
+
+          @Override public void failure(RetrofitError error) {
+            Timber.e("error is " + error.getMessage());
+          }
+        });
+  }
+
+  public void searchSpotify(final String query) {
     spotify.searchTracks(query, new Callback<TracksPager>() {
       @Override public void success(TracksPager tracksPager, Response response) {
-        Timber.e(tracksPager.tracks.items.get(0).name);
-        Timber.e("size is " + tracksPager.tracks.items.size());
-        ArrayList<FuseTrack> fuseTracks = new ArrayList<>();
-        for (Track t : tracksPager.tracks.items) {
-          FuseTrack fuseTrack = new FuseTrack(t);
-          fuseTracks.add(fuseTrack);
+        if (tracksPager.tracks.items.size() != 0) {
+
+          for (Track t : tracksPager.tracks.items) {
+            FuseTrack fuseTrack = new FuseTrack(t);
+            fuseTracks.add(fuseTrack);
+          }
+          searchSC(query);
         }
-
-        adapter = new SearchAdapter(fuseTracks);
-
-        recyclerView.setAdapter(adapter);
-
-
-        adapter.notifyDataSetChanged();//TODO make this list show once it has been searched
       }
 
       @Override public void failure(RetrofitError error) {

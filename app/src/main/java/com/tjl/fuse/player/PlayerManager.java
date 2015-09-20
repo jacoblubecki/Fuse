@@ -11,7 +11,8 @@ import timber.log.Timber;
 /**
  * Created by Jacob on 9/18/15.
  */
-public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
+public class PlayerManager
+    implements MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
   private SpotifyPlayer spotify;
   private SoundCloudPlayer soundcloud;
@@ -45,7 +46,7 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
   public void setQueue(Queue queue) {
     this.queue = queue;
 
-    if(queue.getSize() > 0) {
+    if (queue.getSize() > 0) {
       currentTrack = queue.current();
     } else {
       throw new IllegalStateException("Nothing in queue to play.");
@@ -73,30 +74,34 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
   }
 
   public void play() {
-    if(checkHasAudioFocus()) {
-      switch (currentTrack.type) {
-        case SPOTIFY:
-          if(spotify.state == State.PAUSED) {
-            spotify.play();
-          } else {
-            spotify.start(currentTrack.play_uri);
-          }
-          break;
+    if (queue != null && queue.getSize() > 0) {
+      if (checkHasAudioFocus()) {
+        switch (currentTrack.type) {
+          case SPOTIFY:
+            if (spotify.state == State.PAUSED) {
+              spotify.play();
+            } else {
+              spotify.start(currentTrack.play_uri);
+            }
+            break;
 
-        case SOUNDCLOUD:
-          if(soundcloud.state == State.PAUSED) {
-            soundcloud.play();
-          } else {
-            soundcloud.start(currentTrack.play_uri);
-          }
-          break;
+          case SOUNDCLOUD:
+            if (soundcloud.state == State.PAUSED) {
+              soundcloud.play();
+            } else {
+              soundcloud.start(currentTrack.play_uri);
+            }
+            break;
 
-        default:
-          Timber.e("Unrecognized track type: " + currentTrack.type);
-          break;
+          default:
+            Timber.e("Unrecognized track type: " + currentTrack.type);
+            break;
+        }
+      } else {
+        Timber.e("Can't play. Fuse doesn't have audio focus.");
       }
     } else {
-      Timber.i("Can't play. Fuse doesn't have audio focus.");
+      Timber.e("Tried to play on an empty queue.");
     }
   }
 
@@ -106,9 +111,10 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
   }
 
   public void next() {
-    if(checkHasAudioFocus()) {
-      if (queue != null) {
+    if (queue != null) {
+      if (checkHasAudioFocus()) {
         currentTrack = queue.next();
+
         switch (currentTrack.type) {
           case SPOTIFY:
             spotify.start(currentTrack.play_uri);
@@ -123,17 +129,18 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
             break;
         }
       } else {
-        Timber.e("Tried to move next on null Queue.");
+        Timber.e("Can't play next. Fuse doesn't have audio focus.");
       }
     } else {
-      Timber.i("Can't play next. Fuse doesn't have audio focus.");
+      Timber.e("Tried to move next on null Queue.");
     }
   }
 
   public void previous() {
-    if(checkHasAudioFocus()) {
-      if (queue != null) {
+    if (queue != null) {
+      if (checkHasAudioFocus()) {
         currentTrack = queue.previous();
+
         switch (currentTrack.type) {
           case SPOTIFY:
             spotify.start(currentTrack.play_uri);
@@ -148,10 +155,10 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
             break;
         }
       } else {
-        Timber.e("Tried to move previous on null Queue.");
+        Timber.e("Can't play previous. Fuse doesn't have audio focus.");
       }
     } else {
-      Timber.i("Can't play previous. Fuse doesn't have audio focus.");
+      Timber.e("Tried to move previous on null Queue.");
     }
   }
 
@@ -166,8 +173,8 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
   }
 
   public boolean checkHasAudioFocus() {
-    int result = manager.requestAudioFocus(this, AudioManager.STREAM_MUSIC,
-        AudioManager.AUDIOFOCUS_GAIN);
+    int result =
+        manager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
     return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
   }
@@ -178,7 +185,7 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
   }
 
   @Override public void onAudioFocusChange(int focusChange) {
-    if(spotify.state != State.STOPPED) {
+    if (spotify.state != State.STOPPED) {
       if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
         Timber.i("FOCUS LOST TRANSIENT");
         if (isPlaying()) {
@@ -186,7 +193,7 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
           wasPlayingAtTransientLoss = isPlaying();
         }
       } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-        if(wasPlayingAtTransientLoss) {
+        if (wasPlayingAtTransientLoss) {
           switch (currentTrack.type) {
             case SPOTIFY:
               spotify.play();
@@ -205,9 +212,7 @@ public class PlayerManager implements MediaPlayer.OnCompletionListener, AudioMan
         pause();
       }
 
-
-
-      if(wasPlayingAtTransientLoss) {
+      if (wasPlayingAtTransientLoss) {
         // Launch service
       }
     }
