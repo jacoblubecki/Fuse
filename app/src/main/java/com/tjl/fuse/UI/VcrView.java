@@ -2,13 +2,15 @@ package com.tjl.fuse.ui;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import com.tjl.fuse.R;
 import com.tjl.fuse.player.PlayerManager;
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 /**
  * Created by JoshBeridon on 9/19/15.
@@ -16,9 +18,9 @@ import com.tjl.fuse.player.PlayerManager;
 public class VcrView extends LinearLayout {
 
   private PlayerManager playerManager;
-  private Button previous;
-  private Button playPause;
-  private Button next;
+  private ImageButton previous;
+  private ImageButton playPause;
+  private ImageButton next;
 
   public VcrView(Context context) {
     super(context);
@@ -40,9 +42,29 @@ public class VcrView extends LinearLayout {
   @Override protected void onFinishInflate() {
     super.onFinishInflate();
 
-    previous = (Button) this.findViewById(R.id.previous_button);
-    playPause = (Button) this.findViewById(R.id.play_pause_button);
-    next = (Button) this.findViewById(R.id.next_button);
+    previous = (ImageButton) this.findViewById(R.id.previous_button);
+    playPause = (ImageButton) this.findViewById(R.id.play_pause_button);
+    next = (ImageButton) this.findViewById(R.id.next_button);
+
+    Drawable previousDrawable = MaterialDrawableBuilder.with(getContext())
+        .setIcon(MaterialDrawableBuilder.IconValue.SKIP_PREVIOUS)
+        .build();
+
+    Drawable nextDrawable = MaterialDrawableBuilder.with(getContext())
+        .setIcon(MaterialDrawableBuilder.IconValue.SKIP_NEXT)
+        .build();
+
+    final Drawable playDrawable = MaterialDrawableBuilder.with(getContext())
+        .setIcon(MaterialDrawableBuilder.IconValue.PLAY_CIRCLE)
+        .build();
+
+    final Drawable pauseDrawable = MaterialDrawableBuilder.with(getContext())
+        .setIcon(MaterialDrawableBuilder.IconValue.PAUSE_CIRCLE)
+        .build();
+
+    previous.setImageDrawable(previousDrawable);
+    next.setImageDrawable(nextDrawable);
+    playPause.setImageDrawable(playDrawable);
 
     previous.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
@@ -60,13 +82,12 @@ public class VcrView extends LinearLayout {
       @Override public void onClick(View v) {
         if (PlayerManager.getInstance().isPlaying()) {
           PlayerManager.getInstance().pause();
-          playPause.setText("play");
+          playPause.setImageDrawable(playDrawable);
         } else {
           PlayerManager.getInstance().play();
-          playPause.setText("pause");
+          playPause.setImageDrawable(pauseDrawable);
         }
       }
     });
-
   }
 }

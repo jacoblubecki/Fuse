@@ -9,8 +9,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
@@ -63,6 +61,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewH
         Timber.i("Track at index " + (position));
       }
     });
+
     Picasso.with(holder.card.getContext()).load(tracks.get(position).image_url).into(holder.image);
   }
 

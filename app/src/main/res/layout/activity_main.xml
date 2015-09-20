@@ -51,7 +51,7 @@
             android:orientation="horizontal"
             >
 
-          <Button
+          <ImageButton
               android:id="@+id/previous_button"
               android:layout_width="0dp"
               android:layout_height="match_parent"
@@ -59,9 +59,10 @@
               android:gravity="center"
               android:text="previous"
               android:textSize="24sp"
+              android:contentDescription="previous"
               />
 
-          <Button
+          <ImageButton
               android:id="@+id/play_pause_button"
               android:layout_width="0dp"
               android:layout_height="match_parent"
@@ -69,9 +70,11 @@
               android:gravity="center"
               android:text="play"
               android:textSize="24sp"
+              android:contentDescription="play/pause"
+
               />
 
-          <Button
+          <ImageButton
               android:id="@+id/next_button"
               android:layout_width="0dp"
               android:layout_height="match_parent"
@@ -79,6 +82,7 @@
               android:gravity="center"
               android:text="next"
               android:textSize="24sp"
+              android:contentDescription="next"
               />
         </com.tjl.fuse.ui.VcrView>
 
