@@ -1,7 +1,9 @@
 package com.tjl.fuse.ui;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -9,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
+import com.tjl.fuse.FuseApplication;
 import com.tjl.fuse.R;
 import com.tjl.fuse.adapter.SearchAdapter;
 import com.tjl.fuse.player.PlayerManager;
@@ -31,7 +35,10 @@ import timber.log.Timber;
 /**
  * Created by JoshBeridon on 9/19/15.
  */
-public class FuseSearchView extends LinearLayout {
+
+public class FuseSearchView extends LinearLayout implements
+    SwipeableRecyclerViewTouchListener.SwipeListener {
+  EditText searchText;
   private EditText searchView;
   private Button searchButton;
   private SpotifyService spotify;
@@ -75,20 +82,20 @@ public class FuseSearchView extends LinearLayout {
     soundCloud = apiSC.getService();
 
     playerManager = PlayerManager.getInstance();
-    LinearLayoutManager manager = new LinearLayoutManager(getContext());
-    ArrayList<FuseTrack> items = new ArrayList<>();
-    if (playerManager.getQueue() != null) {
-      items = (ArrayList<FuseTrack>) playerManager.getQueue().getTracks();
-    }
+    SearchAdapter.SearchGridLayoutManager manager = new SearchAdapter.SearchGridLayoutManager(getContext(), 1);
 
-    adapter = new SearchAdapter(items);
+    adapter = new SearchAdapter(fuseTracks);
+    adapter.setHasStableIds(true);
 
     recyclerView = (RecyclerView) findViewById(R.id.search_list_view);
     recyclerView.setLayoutManager(manager);
     recyclerView.setAdapter(adapter);
 
 
+    SwipeableRecyclerViewTouchListener swipeTouchListener =
+        new SwipeableRecyclerViewTouchListener(recyclerView, this);
 
+    recyclerView.addOnItemTouchListener(swipeTouchListener);
 
     invalidate();
 
@@ -101,6 +108,7 @@ public class FuseSearchView extends LinearLayout {
           search(searchView.getText().toString());
           ((NavDrawerActivity) context).hideSoftKeyboard();
           return true;
+
         }
         return false;
       }
@@ -119,7 +127,6 @@ public class FuseSearchView extends LinearLayout {
 
   public void search(String query) {
     searchSpotify(query);
-
   }
 
   public void searchSC(String query) {
@@ -163,5 +170,56 @@ public class FuseSearchView extends LinearLayout {
         Timber.e(error.getMessage());
       }
     });
+  }
+
+  @Override public boolean canSwipe(int position) {
+    return true;
+  }
+
+  public void notifyUndo(final int position, int queuePosition, final FuseTrack track, Direction direction) {
+    String message = "";
+
+    if (direction == Direction.LEFT) {
+      message += "Track removed from Discover.";
+    } else if (direction == Direction.RIGHT) {
+      message += "Track added to your playlist.";
+    }
+
+    Snackbar.make(((Activity) getContext()).findViewById(android.R.id.content), message,
+        Snackbar.LENGTH_LONG).setAction("Undo", new OnClickListener() {
+      @Override public void onClick(View view) {
+        fuseTracks.add(position, track);
+        adapter.notifyDataSetChanged();
+      }
+    }).setActionTextColor(Color.RED).show();
+  }
+
+  @Override
+  public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+    for (int position : reverseSortedPositions) {
+      notifyUndo(position, -1, fuseTracks.get(position), Direction.LEFT);
+
+      fuseTracks.remove(position);
+      adapter.notifyItemRemoved(position);
+    }
+    adapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+    for (int position : reverseSortedPositions) {
+      notifyUndo(position, FuseApplication.getPlaylist().getSize() - 1,  fuseTracks.get(position), Direction.RIGHT);
+
+      FuseApplication.getPlaylist().getTracks().add(fuseTracks.get(position));
+
+      fuseTracks.remove(position);
+      adapter.notifyItemRemoved(position);
+    }
+    adapter.notifyDataSetChanged();
+  }
+
+  private enum Direction {
+    LEFT,
+    RIGHT
   }
 }

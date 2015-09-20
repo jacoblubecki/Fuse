@@ -80,8 +80,8 @@ public class Queue implements Iterable<FuseTrack>{
     if (index > tracks.size() - 1) {
       if (looping) {
         index = 0;
-      } else if (index == tracks.size()) {
-        index--;
+      } else {
+        index = tracks.size() - 1;
       }
     }
 
@@ -90,5 +90,14 @@ public class Queue implements Iterable<FuseTrack>{
 
   @Override public Iterator<FuseTrack> iterator() {
     return tracks.iterator();
+  }
+
+  public void notifyDataSetChanged() {
+    previousTrack();
+    nextTrack();
+  }
+
+  public void setCurrent(int current) {
+    this.index = current;
   }
 }

@@ -64,6 +64,9 @@ public class DiscoveryActivity extends AppCompatActivity {
           }
           break;
         }
+        case "Spotify":{
+
+        }
       }
     }
   }

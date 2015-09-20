@@ -2,15 +2,15 @@ package com.tjl.fuse.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import com.tjl.fuse.FuseApplication;
 import com.tjl.fuse.R;
 import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.soundcloud.SoundCloudAuth;
 import com.tjl.fuse.spotify.SpotifyAuth;
-import com.tjl.fuse.ui.activities.NavDrawerActivity;
+import com.tjl.fuse.ui.SwipeablePlaylistView;
 import com.tjl.fuse.utils.preferences.StringPreference;
 import timber.log.Timber;
 
@@ -34,6 +34,8 @@ public class FuseActivity extends NavDrawerActivity {
     setUpNavDrawer(R.id.drawer_layout_home, R.id.list_slidermenu_home);
 
     SpotifyAuth.authenticate(this, SPOTIFY_REQUEST_CODE);
+
+    displayView(1);
   }
 
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -86,6 +88,7 @@ public class FuseActivity extends NavDrawerActivity {
 
       case 1:
         Timber.e("Playlist selected.");
+        PlayerManager.getInstance().setQueue(FuseApplication.getPlaylist());
 
         layoutId = R.layout.playlist_view;
         c = getLayoutInflater().inflate(layoutId, v, false);
@@ -131,6 +134,11 @@ public class FuseActivity extends NavDrawerActivity {
         super.onBackPressed();
         break;
     }
+  }
+
+  @Override public void onPause() {
+    super.onPause();
+    FuseApplication.serializePlaylist();
   }
 
   @Override public void onDestroy() {
