@@ -13,4 +13,5 @@
   <string name="shared_prefs_name">fuse_preferences</string>
   <string name="spotify_token_key">spotify_token_key</string>
   <string name="song_image_desc">Song Image.</string>
+  <string name="search">Search</string>
 </resources>

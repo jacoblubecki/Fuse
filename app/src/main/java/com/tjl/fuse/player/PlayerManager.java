@@ -49,7 +49,7 @@ public class PlayerManager
     if (queue.getSize() > 0) {
       currentTrack = queue.current();
     } else {
-      throw new IllegalStateException("Nothing in queue to play.");
+      Timber.w("Nothing in queue to play.");
     }
   }
 
@@ -111,7 +111,7 @@ public class PlayerManager
   }
 
   public void next() {
-    if (queue != null) {
+    if (queue != null && queue.getSize() > 0) {
       if (checkHasAudioFocus()) {
         currentTrack = queue.next();
 
@@ -137,7 +137,7 @@ public class PlayerManager
   }
 
   public void previous() {
-    if (queue != null) {
+    if (queue != null && queue.getSize() > 0) {
       if (checkHasAudioFocus()) {
         currentTrack = queue.previous();
 
@@ -170,6 +170,16 @@ public class PlayerManager
     soundcloud.release();
     spotify.release();
     instance = null;
+  }
+
+  public void notifyDataSetChanged() {
+    if(queue.getSize() > 0) {
+      queue.notifyDataSetChanged();
+      currentTrack = queue.current();
+      play();
+    } else {
+      pause();
+    }
   }
 
   public boolean checkHasAudioFocus() {

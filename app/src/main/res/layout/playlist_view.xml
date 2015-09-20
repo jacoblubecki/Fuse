@@ -1,15 +1,16 @@
 <LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/container"
-android:layout_height="match_parent"
-android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
     >
 
-<com.tjl.fuse.ui.PlaylistView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+  <com.tjl.fuse.ui.SwipeablePlaylistView xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/swipe_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/playlist_view"
@@ -18,6 +19,6 @@ android:layout_width="match_parent"
         />
 
 
-</com.tjl.fuse.ui.PlaylistView>
+  </com.tjl.fuse.ui.SwipeablePlaylistView>
 </LinearLayout>
 

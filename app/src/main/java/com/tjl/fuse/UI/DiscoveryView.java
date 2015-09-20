@@ -54,7 +54,5 @@ public class DiscoveryView extends LinearLayout {
     recyclerView = (RecyclerView) findViewById(R.id.channels_view);
     recyclerView.setLayoutManager(manager);
     recyclerView.setAdapter(adapter);
-
-    invalidate();
   }
 }

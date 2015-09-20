@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
+import com.tjl.fuse.FuseApplication;
 import com.tjl.fuse.R;
 import com.tjl.fuse.adapter.SearchAdapter;
 import com.tjl.fuse.player.PlayerManager;
@@ -20,6 +21,7 @@ public class SwipeablePlaylistView extends PlaylistView
     implements SwipeableRecyclerViewTouchListener.SwipeListener {
 
   private SearchAdapter adapter;
+  private SwipeableRecyclerViewTouchListener swipeTouchListener;
 
   public SwipeablePlaylistView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -39,7 +41,7 @@ public class SwipeablePlaylistView extends PlaylistView
       recyclerView.setLayoutManager(manager);
       recyclerView.setAdapter(adapter);
 
-      SwipeableRecyclerViewTouchListener swipeTouchListener =
+      swipeTouchListener =
           new SwipeableRecyclerViewTouchListener(recyclerView, this);
 
       recyclerView.addOnItemTouchListener(swipeTouchListener);
@@ -50,15 +52,16 @@ public class SwipeablePlaylistView extends PlaylistView
     String message = "";
 
     if (direction == Direction.LEFT) {
-      message += "Track removed from Discover.";
+      message += "Track removed from the current playlist.";
     } else if (direction == Direction.RIGHT) {
-      message += "Track added to your playlist.";
+      message += "Track added to the end of your playlist.";
     }
 
-    Snackbar.make(((Activity) getContext()).findViewById(android.R.id.content), message,
+    Snackbar.make(((Activity) getContext()).findViewById(R.id.coordinator), message,
         Snackbar.LENGTH_LONG).setAction("Undo", new OnClickListener() {
       @Override public void onClick(View view) {
-        PlayerManager.getInstance().getQueue().getTracks().add(position, track);
+        playerManager.getQueue().getTracks().add(position, track);
+        playerManager.notifyDataSetChanged();
         adapter.notifyDataSetChanged();
       }
     }).setActionTextColor(Color.RED).show();
@@ -74,6 +77,7 @@ public class SwipeablePlaylistView extends PlaylistView
         notifyUndo(position, playerManager.getQueue().getTracks().get(position), Direction.LEFT);
 
       playerManager.getQueue().getTracks().remove(position);
+      playerManager.notifyDataSetChanged();
       adapter.notifyItemRemoved(position);
     }
     adapter.notifyDataSetChanged();
@@ -82,9 +86,12 @@ public class SwipeablePlaylistView extends PlaylistView
   @Override
   public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
     for (int position : reverseSortedPositions) {
-      notifyUndo(position, playerManager.getQueue().getTracks().get(position), Direction.RIGHT);
+      FuseTrack track = playerManager.getQueue().getTracks().get(position);
+      notifyUndo(position, track, Direction.RIGHT);
 
+      FuseApplication.getPlaylist().getTracks().add(track);
       playerManager.getQueue().getTracks().remove(position);
+      playerManager.notifyDataSetChanged();
       adapter.notifyItemRemoved(position);
     }
     adapter.notifyDataSetChanged();

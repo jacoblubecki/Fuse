@@ -15,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.tjl.fuse.R;
+import com.tjl.fuse.player.PlayerManager;
 import com.tjl.fuse.player.tracks.FuseTrack;
+import com.tjl.fuse.player.tracks.Queue;
 import java.util.List;
 
 /**
@@ -24,7 +26,6 @@ import java.util.List;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewHolder> {
 
   private List<FuseTrack> tracks;
-  private int lastPosition = -1;
 
   public SearchAdapter(List<FuseTrack> tracks) {
     this.tracks = tracks;
@@ -37,17 +38,27 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TrackViewH
     return new TrackViewHolder(view);
   }
 
-  @Override public void onBindViewHolder(TrackViewHolder holder, int position) {
-    if(tracks.get(position).type==(FuseTrack.Type.SPOTIFY)){
-      holder.card.setBackgroundColor(Color.GREEN);
-    } else if (tracks.get(position).type==(FuseTrack.Type.SOUNDCLOUD)){
-      holder.card.setBackgroundColor(Color.YELLOW);
-    } else{
+  @Override public void onBindViewHolder(TrackViewHolder holder, final int position) {
+    if (tracks.get(position).type == (FuseTrack.Type.SPOTIFY)) {
+      holder.card.setBackgroundColor(Color.parseColor("#32CD64"));
+    } else if (tracks.get(position).type == (FuseTrack.Type.SOUNDCLOUD)) {
+      holder.card.setBackgroundColor(Color.parseColor("#F97242"));
+    } else {
       holder.card.setBackgroundColor(Color.CYAN);
     }
 
+    final Queue queue = new Queue(tracks);
 
     holder.text.setText(tracks.get(position).title);
+    holder.card.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        if (PlayerManager.getInstance().getQueue() != queue) {
+          PlayerManager.getInstance().setQueue(queue);
+          PlayerManager.getInstance().getQueue().setCurrent(position);
+          PlayerManager.getInstance().play();
+        }
+      }
+    });
     Picasso.with(holder.card.getContext()).load(tracks.get(position).image_url).into(holder.image);
   }
 
