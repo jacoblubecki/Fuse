@@ -92,11 +92,6 @@ public class FuseSearchView extends LinearLayout {
 
     invalidate();
 
-    searchButton.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        search(searchView.getText().toString());
-      }
-    });
 
     searchView.setOnKeyListener(new OnKeyListener() {
       @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
