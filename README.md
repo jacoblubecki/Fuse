@@ -1,5 +1,5 @@
 # Fuse
-Android app for WUHack that makes music discovery easy.
+Android app created for WUHack that makes music discovery easy.
 
 ## Screenshots
 
